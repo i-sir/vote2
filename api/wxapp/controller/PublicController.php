@@ -80,8 +80,8 @@ class PublicController extends AuthController
      * 测试接口
      *
      *
-     *   test_environment: http://lscs.ikun:9090/api/wxapp/public/index
-     *   official_environment: https://lscs001.jscxkf.net/api/wxapp/public/index
+     *   test_environment: http://vote2.ikun:9090/api/wxapp/public/index
+     *   official_environment: http://xcxkf220.aubye.com/api/wxapp/public/index
      *   api: /wxapp/public/index
      *   remark_name: 测试接口
      *
@@ -132,8 +132,8 @@ class PublicController extends AuthController
      * )
      *
      *
-     *   test_environment: http://lscs.ikun:9090/api/wxapp/public/find_setting
-     *   official_environment: https://lscs001.jscxkf.net/api/wxapp/public/find_setting
+     *   test_environment: http://vote2.ikun:9090/api/wxapp/public/find_setting
+     *   official_environment: http://xcxkf220.aubye.com/api/wxapp/public/find_setting
      *   api: /wxapp/public/find_setting
      *   remark_name: 查询系统配置信息
      *
@@ -236,8 +236,8 @@ class PublicController extends AuthController
      *     @OA\Response(response="default", description="An example resource")
      * )
      *
-     *   test_environment: http://lscs.ikun:9090/api/wxapp/public/find_agreement_list
-     *   official_environment: https://lscs001.jscxkf.net/api/wxapp/public/find_agreement_list
+     *   test_environment: http://vote2.ikun:9090/api/wxapp/public/find_agreement_list
+     *   official_environment: http://xcxkf220.aubye.com/api/wxapp/public/find_agreement_list
      *   api: /wxapp/public/find_agreement_list
      *   remark_name: 查询协议列表
      *
@@ -306,8 +306,8 @@ class PublicController extends AuthController
      *     @OA\Response(response="default", description="An example resource")
      * )
      *
-     *   test_environment: http://lscs.ikun:9090/api/wxapp/public/upload_asset
-     *   official_environment: https://lscs001.jscxkf.net/api/wxapp/public/upload_asset
+     *   test_environment: http://vote2.ikun:9090/api/wxapp/public/upload_asset
+     *   official_environment: http://xcxkf220.aubye.com/api/wxapp/public/upload_asset
      *   api: /wxapp/public/upload_asset
      *   remark_name: 上传图片
      *
@@ -359,8 +359,8 @@ class PublicController extends AuthController
      *     @OA\Response(response="default", description="An example resource")
      * )
      *
-     *   test_environment: http://lscs.ikun:9090/api/wxapp/public/find_slide
-     *   official_environment: https://lscs001.jscxkf.net/api/wxapp/public/find_slide
+     *   test_environment: http://vote2.ikun:9090/api/wxapp/public/find_slide
+     *   official_environment: http://xcxkf220.aubye.com/api/wxapp/public/find_slide
      *   api: /wxapp/public/find_slide
      *   remark_name: 查询幻灯片
      *
@@ -408,8 +408,8 @@ class PublicController extends AuthController
      *     @OA\Response(response="default", description="An example resource")
      * )
      *
-     *   test_environment: http://lscs.ikun:9090/api/wxapp/public/find_navs
-     *   official_environment: https://lscs001.jscxkf.net/api/wxapp/public/find_navs
+     *   test_environment: http://vote2.ikun:9090/api/wxapp/public/find_navs
+     *   official_environment: http://xcxkf220.aubye.com/api/wxapp/public/find_navs
      *   api: /wxapp/public/find_navs
      *   remark_name: 查询导航列表
      *
@@ -488,8 +488,8 @@ class PublicController extends AuthController
      *     @OA\Response(response="default", description="An example resource")
      * )
      *
-     *   test_environment: http://lscs.ikun:9090/api/wxapp/public/wx_app_login
-     *   official_environment: https://lscs001.jscxkf.net/api/wxapp/public/wx_app_login
+     *   test_environment: http://vote2.ikun:9090/api/wxapp/public/wx_app_login
+     *   official_environment: http://xcxkf220.aubye.com/api/wxapp/public/wx_app_login
      *   api: /wxapp/public/wx_app_login
      *   remark_name: 小程序授权登录
      *
@@ -604,8 +604,8 @@ class PublicController extends AuthController
      *     @OA\Response(response="default", description="An example resource")
      * )
      *
-     *   test_environment: http://lscs.ikun:9090/api/wxapp/public/wx_app_silent_login
-     *   official_environment: https://lscs001.jscxkf.net/api/wxapp/public/wx_app_silent_login
+     *   test_environment: http://vote2.ikun:9090/api/wxapp/public/wx_app_silent_login
+     *   official_environment: http://xcxkf220.aubye.com/api/wxapp/public/wx_app_silent_login
      *   api: /wxapp/public/wx_app_silent_login
      *   remark_name: 小程序静默授权登录
      *
@@ -705,8 +705,8 @@ class PublicController extends AuthController
      *     @OA\Response(response="default", description="An example resource")
      * )
      *
-     *   test_environment: http://lscs.ikun:9090/api/wxapp/public/get_opneid
-     *   official_environment: https://lscs001.jscxkf.net/api/wxapp/public/get_opneid
+     *   test_environment: http://vote2.ikun:9090/api/wxapp/public/get_opneid
+     *   official_environment: http://xcxkf220.aubye.com/api/wxapp/public/get_opneid
      *   api: /wxapp/public/get_opneid
      *   remark_name: 静默获取openid
      *
@@ -797,8 +797,8 @@ class PublicController extends AuthController
      *     @OA\Response(response="default", description="An example resource")
      * )
      *
-     *   test_environment: http://lscs.ikun:9090/api/wxapp/public/wx_app_phone2
-     *   official_environment: https://lscs001.jscxkf.net/api/wxapp/public/wx_app_phone2
+     *   test_environment: http://vote2.ikun:9090/api/wxapp/public/wx_app_phone2
+     *   official_environment: http://xcxkf220.aubye.com/api/wxapp/public/wx_app_phone2
      *   api: /wxapp/public/wx_app_phone2
      *   remark_name: 小程序授权手机号登录(不包含注册)
      *
@@ -927,8 +927,8 @@ class PublicController extends AuthController
      * )
      *
      *
-     *   test_environment: http://lscs.ikun:9090/api/wxapp/public/wx_app_phone
-     *   official_environment: https://lscs001.jscxkf.net/api/wxapp/public/wx_app_phone
+     *   test_environment: http://vote2.ikun:9090/api/wxapp/public/wx_app_phone
+     *   official_environment: http://xcxkf220.aubye.com/api/wxapp/public/wx_app_phone
      *   api: /wxapp/public/wx_app_phone
      *   remark_name: 小程序授权手机号(授权登录)
      *
@@ -1038,8 +1038,8 @@ class PublicController extends AuthController
      *     @OA\Response(response="default", description="An example resource")
      * )
      *
-     *   test_environment: http://lscs.ikun:9090/api/wxapp/public/h5_login
-     *   official_environment: https://lscs001.jscxkf.net/api/wxapp/public/h5_login
+     *   test_environment: http://vote2.ikun:9090/api/wxapp/public/h5_login
+     *   official_environment: http://xcxkf220.aubye.com/api/wxapp/public/h5_login
      *   api: /wxapp/public/h5_login
      *   remark_name: H5授权登录
      *
@@ -1133,8 +1133,8 @@ class PublicController extends AuthController
      *     @OA\Response(response="default", description="An example resource")
      * )
      *
-     *   test_environment: http://lscs.ikun:9090/api/wxapp/public/get_js_sign
-     *   official_environment: https://lscs001.jscxkf.net/api/wxapp/public/get_js_sign
+     *   test_environment: http://vote2.ikun:9090/api/wxapp/public/get_js_sign
+     *   official_environment: http://xcxkf220.aubye.com/api/wxapp/public/get_js_sign
      *   api: /wxapp/public/get_js_sign
      *   remark_name: 获取公众号分享签名
      *
@@ -1187,8 +1187,8 @@ class PublicController extends AuthController
      *     @OA\Response(response="default", description="An example resource")
      * )
      *
-     *   test_environment: http://lscs.ikun:9090/api/wxapp/public/wx_qrcode
-     *   official_environment: https://lscs001.jscxkf.net/api/wxapp/public/wx_qrcode
+     *   test_environment: http://vote2.ikun:9090/api/wxapp/public/wx_qrcode
+     *   official_environment: http://xcxkf220.aubye.com/api/wxapp/public/wx_qrcode
      *   api: /wxapp/public/wx_qrcode
      *   remark_name: 小程序程序二维码(必须get请求)
      *
@@ -1328,8 +1328,8 @@ class PublicController extends AuthController
      *     @OA\Response(response="default", description="An example resource")
      * )
      *
-     *   test_environment: http://lscs.ikun:9090/api/wxapp/public/add_user_pass
-     *   official_environment: https://lscs001.jscxkf.net/api/wxapp/public/add_user_pass
+     *   test_environment: http://vote2.ikun:9090/api/wxapp/public/add_user_pass
+     *   official_environment: http://xcxkf220.aubye.com/api/wxapp/public/add_user_pass
      *   api: /wxapp/public/add_user_pass
      *   remark_name: 手机号密码注册
      *
@@ -1417,8 +1417,8 @@ class PublicController extends AuthController
      *     @OA\Response(response="default", description="An example resource")
      * )
      *
-     *   test_environment: http://lscs.ikun:9090/api/wxapp/public/pass_login
-     *   official_environment: https://lscs001.jscxkf.net/api/wxapp/public/pass_login
+     *   test_environment: http://vote2.ikun:9090/api/wxapp/public/pass_login
+     *   official_environment: http://xcxkf220.aubye.com/api/wxapp/public/pass_login
      *   api: /wxapp/public/pass_login
      *   remark_name: 手机号密码登录
      *
@@ -1491,8 +1491,8 @@ class PublicController extends AuthController
      *     @OA\Response(response="default", description="An example resource")
      * )
      *
-     *   test_environment: http://lscs.ikun:9090/api/wxapp/public/sms_login
-     *   official_environment: https://lscs001.jscxkf.net/api/wxapp/public/sms_login
+     *   test_environment: http://vote2.ikun:9090/api/wxapp/public/sms_login
+     *   official_environment: http://xcxkf220.aubye.com/api/wxapp/public/sms_login
      *   api: /wxapp/public/sms_login
      *   remark_name: 手机号验证码登录
      *
@@ -1589,8 +1589,8 @@ class PublicController extends AuthController
      *     @OA\Response(response="default", description="An example resource")
      * )
      *
-     *   test_environment: http://lscs.ikun:9090/api/wxapp/public/update_pass
-     *   official_environment: https://lscs001.jscxkf.net/api/wxapp/public/update_pass
+     *   test_environment: http://vote2.ikun:9090/api/wxapp/public/update_pass
+     *   official_environment: http://xcxkf220.aubye.com/api/wxapp/public/update_pass
      *   api: /wxapp/public/update_pass
      *   remark_name: 修改密码
      *
@@ -1661,8 +1661,8 @@ class PublicController extends AuthController
      *     @OA\Response(response="default", description="An example resource")
      * )
      *
-     *   test_environment: http://lscs.ikun:9090/api/wxapp/public/send_sms
-     *   official_environment: https://lscs001.jscxkf.net/api/wxapp/public/send_sms
+     *   test_environment: http://vote2.ikun:9090/api/wxapp/public/send_sms
+     *   official_environment: http://xcxkf220.aubye.com/api/wxapp/public/send_sms
      *   api: /wxapp/public/send_sms
      *   remark_name: 获取手机验证码
      *
@@ -1719,8 +1719,8 @@ class PublicController extends AuthController
      *     @OA\Response(response="default", description="An example resource")
      * )
      *
-     *   test_environment: http://lscs.ikun:9090/api/wxapp/public/send_mail
-     *   official_environment: https://lscs001.jscxkf.net/api/wxapp/public/send_mail
+     *   test_environment: http://vote2.ikun:9090/api/wxapp/public/send_mail
+     *   official_environment: http://xcxkf220.aubye.com/api/wxapp/public/send_mail
      *   api: /wxapp/public/send_mail
      *   remark_name: 获取邮箱验证码
      *
@@ -1797,8 +1797,8 @@ class PublicController extends AuthController
      *     @OA\Response(response="default", description="An example resource")
      * )
      *
-     *   test_environment: http://lscs.ikun:9090/api/wxapp/public/send_voice
-     *   official_environment: https://lscs001.jscxkf.net/api/wxapp/public/send_voice
+     *   test_environment: http://vote2.ikun:9090/api/wxapp/public/send_voice
+     *   official_environment: http://xcxkf220.aubye.com/api/wxapp/public/send_voice
      *   api: /wxapp/public/send_voice
      *   remark_name: 电话语音通知
      *
@@ -1838,8 +1838,8 @@ class PublicController extends AuthController
      *     @OA\Response(response="default", description="An example resource")
      * )
      *
-     *   test_environment: http://lscs.ikun:9090/api/wxapp/public/find_area
-     *   official_environment: https://lscs001.jscxkf.net/api/wxapp/public/find_area
+     *   test_environment: http://vote2.ikun:9090/api/wxapp/public/find_area
+     *   official_environment: http://xcxkf220.aubye.com/api/wxapp/public/find_area
      *   api: /wxapp/public/find_area
      *   remark_name: 获取 省市区
      *
@@ -1892,8 +1892,8 @@ class PublicController extends AuthController
      *     @OA\Response(response="default", description="An example resource")
      * )
      *
-     *   test_environment: http://lscs.ikun:9090/api/wxapp/public/find_letter_city_list
-     *   official_environment: https://lscs001.jscxkf.net/api/wxapp/public/find_letter_city_list
+     *   test_environment: http://vote2.ikun:9090/api/wxapp/public/find_letter_city_list
+     *   official_environment: http://xcxkf220.aubye.com/api/wxapp/public/find_letter_city_list
      *   api: /wxapp/public/find_letter_city_list
      *   remark_name: 获取市 带字母
      *
@@ -1941,8 +1941,8 @@ class PublicController extends AuthController
      *     @OA\Response(response="default", description="An example resource")
      * )
      *
-     *   test_environment: http://lscs.ikun:9090/api/wxapp/public/translate
-     *   official_environment: https://lscs001.jscxkf.net/api/wxapp/public/translate
+     *   test_environment: http://vote2.ikun:9090/api/wxapp/public/translate
+     *   official_environment: http://xcxkf220.aubye.com/api/wxapp/public/translate
      *   api: /wxapp/public/translate
      *   remark_name: 翻译 误删
      *
@@ -1966,8 +1966,8 @@ class PublicController extends AuthController
      * @return mixed
      *
      *
-     *   test_environment: http://lscs.ikun:9090/api/wxapp/public/get_stable_access_token
-     *   official_environment: https://lscs001.jscxkf.net/api/wxapp/public/get_stable_access_token
+     *   test_environment: http://vote2.ikun:9090/api/wxapp/public/get_stable_access_token
+     *   official_environment: http://xcxkf220.aubye.com/api/wxapp/public/get_stable_access_token
      *   api: /wxapp/public/get_stable_access_token
      *   remark_name: 获取超稳定 access_token
      *
@@ -2014,8 +2014,8 @@ class PublicController extends AuthController
      *     @OA\Response(response="default", description="An example resource")
      * )
      *
-     *   test_environment: http://lscs.ikun:9090/api/wxapp/public/find_reverse_address
-     *   official_environment: https://lscs001.jscxkf.net/api/wxapp/public/find_reverse_address
+     *   test_environment: http://vote2.ikun:9090/api/wxapp/public/find_reverse_address
+     *   official_environment: http://xcxkf220.aubye.com/api/wxapp/public/find_reverse_address
      *   api: /wxapp/public/find_reverse_address
      *   remark_name: 根据经纬度获取地址信息
      *
