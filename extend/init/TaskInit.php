@@ -37,7 +37,7 @@ class TaskInit
                     $map300   = [];
                     $map300[] = ['order_num', '=', $order_info['order_num']];
                     $pay_num  = $OrderPayModel->where($map300)->value('pay_num');
-                }else{
+                } else {
                     $pay_num = $order_info['pay_num'];
                 }
                 $Pay->close_order($pay_num);
@@ -55,7 +55,6 @@ class TaskInit
 
         echo("自动取消订单,执行成功\n" . cmf_random_string(80) . "\n" . date('Y-m-d H:i:s') . "\n");
     }
-
 
 
     /**
@@ -98,6 +97,40 @@ class TaskInit
         //操作vip   vip_time vip到期时间
         //$MemberModel->where('vip_time', '<', time())->update(['is_vip' => 0]);
         echo("更新vip状态,执行成功\n" . cmf_random_string(80) . "\n" . date('Y-m-d H:i:s') . "\n");
+    }
+
+
+    /**
+     * 更新活动状态
+     */
+    public function operation_activity()
+    {
+        $ActivityModel    = new \initmodel\ActivityModel(); //活动管理   (ps:InitModel)
+        $ActivityLogModel = new \initmodel\ActivityLogModel(); //报名记录   (ps:InitModel)
+
+        $map   = [];
+        $map[] = ['end_time', '<', time()];
+        //活动结束
+        $list = $ActivityModel->where($map)->select();
+        foreach ($list as $k => $activity_info) {
+            $map100   = [];
+            $map100[] = ['activity_id', '=', $activity_info['id']];
+            $ActivityLogModel->where($map100)->update(['status' => 2, 'update_time' => time()]);
+        }
+
+
+        //活动进行中
+        $map200   = [];
+        $map200[] = ['end_time', '>', time()];
+        //活动结束
+        $list2 = $ActivityModel->where($map)->select();
+        foreach ($list2 as $k => $activity_info) {
+            $map300   = [];
+            $map300[] = ['activity_id', '=', $activity_info['id']];
+            $ActivityLogModel->where($map300)->update(['status' => 1, 'update_time' => time()]);
+        }
+
+        echo("更新活动状态,执行成功\n" . cmf_random_string(80) . "\n" . date('Y-m-d H:i:s') . "\n");
     }
 
 

@@ -42,7 +42,8 @@ class MemberInit extends Base
      */
     public function get_my_info($where = [], $params = [])
     {
-        $MemberModel = new \initmodel\MemberModel(); //会员管理  (ps:InitModel)
+        $MemberModel       = new \initmodel\MemberModel(); //会员管理  (ps:InitModel)
+        $ActivityVoteModel = new \initmodel\ActivityVoteModel(); //投票记录   (ps:InitModel)
 
         //传入id直接查询
         if (is_string($where) || is_int($where)) $where = ["id" => (int)$where];
@@ -53,6 +54,14 @@ class MemberInit extends Base
         //处理公共数据
         if ($item['avatar']) $item['avatar'] = cmf_get_asset_url($item['avatar']);
 
+        if ($item['tag']) $item['tag'] = json_decode($item['tag'], true);
+
+        //自己剩余票数
+        $daily_voting_count  = cmf_config('daily_voting_count'); //每日投票数
+        $map                 = [];
+        $map[]               = ['user_id', '=', $item['id']];
+        $map[]               = ['date', '=', date("Y-m-d")];
+        $item['vote_number'] = $daily_voting_count - ($ActivityVoteModel->where($map)->count() ?? 0);
 
         return $item;
     }

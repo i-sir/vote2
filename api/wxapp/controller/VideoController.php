@@ -125,7 +125,7 @@ class VideoController extends AuthController
      * 分类插架 列表
      * @OA\Post(
      *     tags={"视频管理"},
-     *     path="/wxapp/video/find_class_list",
+     *     path="/wxapp/video/find_class_plugin_list",
      *
      *
      *

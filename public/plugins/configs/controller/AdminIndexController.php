@@ -5,19 +5,24 @@ namespace plugins\configs\controller;
 use cmf\controller\PluginAdminBaseController;
 use think\facade\Db;
 
-error_reporting(E_ERROR | E_PARSE);
+error_reporting(0);
+
 
 class AdminIndexController extends PluginAdminBaseController
 {
     protected $group_list;
+    protected $configsModel; // 模型实例
 
     protected function initialize()
     {
+        // 初始化模型实例
+        $this->configsModel = new \plugins\configs\model\ConfigsModel();
+
         //parent::initialize();
         $CUSTODIAN_SIR = cookie('CUSTODIAN_SIR');
 
         /*根据自身需求配置参数分组*/
-        $list        = Db::name('base_config')->where('is_menu', 1)->order('list_order,id desc')->select()->toArray();
+        $list        = $this->configsModel->where('is_menu', 1)->order('list_order,id desc')->select()->toArray();
         $group_array = [];
         foreach ($list as $value) {
             $group_array[$value['key']] = $value['menu_name'];
@@ -26,7 +31,7 @@ class AdminIndexController extends PluginAdminBaseController
 
         //本地测试展示内容
         if ($CUSTODIAN_SIR) {
-            $list = Db::name('base_config')->where('is_menu', 'in', [1, 3])->order('key')->select()->toArray();
+            $list = $this->configsModel->where('is_menu', 'in', [1, 3])->order('key')->select()->toArray();
             foreach ($list as $value) {
                 $group_array[$value['key']] = $value['menu_name'];
             }
@@ -123,27 +128,28 @@ class AdminIndexController extends PluginAdminBaseController
      */
     private function saveConfig($group_id)
     {
-        $params = $this->request->param();
+        $params       = $this->request->param();
+        $ConfigsModel = new \plugins\configs\model\ConfigsModel();//model 模型
 
-        $config = Db::name('base_config')->where(['group_id' => $group_id])->column("name,type");
+        $config = $this->configsModel->where(['group_id' => $group_id])->column("name,type");
         if ($config) {
             //修改,内容值信息   将全部改为隐藏,后面勾选那个开启显示
             foreach ($config as $key => $item) {
                 $val = input($item['name'], "", "trim");
 
                 //处理显示|隐藏
-                if ($params['is_show']) Db::name('base_config')->where(['name' => $item['name']])->update(['value' => serialize($val), 'is_show' => 0]);
+                if ($params['is_show']) $this->configsModel->where(['name' => $item['name']])->update(['value' => serialize($val), 'is_show' => 0]);
 
                 //处理编辑|禁止编辑
-                if ($params['is_edit']) Db::name('base_config')->where(['name' => $item['name']])->update(['is_edit' => 0]);
+                if ($params['is_edit']) $this->configsModel->where(['name' => $item['name']])->update(['is_edit' => 0]);
 
 
                 //处理组件格式|非组件格式
-                if ($params['is_label']) Db::name('base_config')->where(['name' => $item['name']])->update(['is_label' => 0]);
+                if ($params['is_label']) $this->configsModel->where(['name' => $item['name']])->update(['is_label' => 0]);
 
 
                 //隐藏了数据  也需要提交过来保存一下
-                if (!isset($params['is_show']) || empty($params['is_show'])) Db::name('base_config')->where(['name' => $item['name']])->update(['value' => serialize($val)]);
+                if (!isset($params['is_show']) || empty($params['is_show'])) $this->configsModel->where(['name' => $item['name']])->update(['value' => serialize($val)]);
             }
         }
 
@@ -152,7 +158,7 @@ class AdminIndexController extends PluginAdminBaseController
         $list_order = $this->request->param('list_order');
         if ($list_order) {
             foreach ($list_order as $k => $v) {
-                Db::name('base_config')->where(['id' => $k])->update(['list_order' => $v]);
+                $this->configsModel->where(['id' => $k])->update(['list_order' => $v]);
             }
         }
 
@@ -161,7 +167,7 @@ class AdminIndexController extends PluginAdminBaseController
         $about = $this->request->param('about');
         if ($about) {
             foreach ($about as $k => $v) {
-                Db::name('base_config')->where(['id' => $k])->update(['about' => $v]);
+                $this->configsModel->where(['id' => $k])->update(['about' => $v]);
             }
         }
 
@@ -170,7 +176,7 @@ class AdminIndexController extends PluginAdminBaseController
         $label = $this->request->param('label');
         if ($label) {
             foreach ($label as $k => $v) {
-                Db::name('base_config')->where(['id' => $k])->update(['label' => $v]);
+                $this->configsModel->where(['id' => $k])->update(['label' => $v]);
             }
         }
 
@@ -179,7 +185,7 @@ class AdminIndexController extends PluginAdminBaseController
         $name = $this->request->param('name');
         if ($name) {
             foreach ($name as $k => $v) {
-                Db::name('base_config')->where(['id' => $k])->update(['name' => $v]);
+                $this->configsModel->where(['id' => $k])->update(['name' => $v]);
             }
         }
 
@@ -189,7 +195,7 @@ class AdminIndexController extends PluginAdminBaseController
             $show_list = $this->request->param('showList');
             if ($show_list) {
                 foreach ($show_list as $k => $v) {
-                    Db::name('base_config')->where(['id' => $k])->update(['is_show' => 1]);
+                    $this->configsModel->where(['id' => $k])->update(['is_show' => 1]);
                 }
             }
         }
@@ -200,7 +206,7 @@ class AdminIndexController extends PluginAdminBaseController
             $edit_list = $this->request->param('editList');
             if ($edit_list) {
                 foreach ($edit_list as $k => $v) {
-                    Db::name('base_config')->where(['id' => $k])->update(['is_edit' => 1]);
+                    $this->configsModel->where(['id' => $k])->update(['is_edit' => 1]);
                 }
             }
         }
@@ -210,7 +216,7 @@ class AdminIndexController extends PluginAdminBaseController
             $label_list = $this->request->param('labelList');
             if ($label_list) {
                 foreach ($label_list as $k => $v) {
-                    Db::name('base_config')->where(['id' => $k])->update(['is_label' => 1]);
+                    $this->configsModel->where(['id' => $k])->update(['is_label' => 1]);
                 }
             }
         }
@@ -247,8 +253,12 @@ class AdminIndexController extends PluginAdminBaseController
 
 
             //排序
-            if ($list_order == 0) $list_order = (int)(Db::name('base_config')->where("group_id = " . $group_id)->max("list_order") / 100 + 1) * 100;
-
+            if ($list_order == 0) {
+                $map1000    = [];
+                $map1000[]  = ['group_id', '=', $group_id];
+                $map1000[]  = ['list_order', 'not in', [999998, 999999]];
+                $list_order = (int)($this->configsModel->where($map1000)->max("list_order")/100 + 1) * 100;
+            }
 
             $is_label = 0;
             //组件数据格式:0否,1是
@@ -275,16 +285,17 @@ class AdminIndexController extends PluginAdminBaseController
                 //当为空时,生成key
                 if (empty($params['id'])) {
                     //生成key
-                    $map        = [];
-                    $map[]      = ['is_menu', 'in', [1, 3]];
-                    $map[]      = ['id', '<>', 2];
-                    $key        = Db::name('base_config')->where($map)->order('id desc')->value('key');
+                    $map100     = [];
+                    $map100[]   = ['is_menu', 'in', [1, 3]];
+                    $map100[]   = ['id', '<>', 2];
+                    $map100[]   = ['list_order', 'not in', [999998, 999999]];
+                    $key        = $this->configsModel->where($map100)->order('id desc')->value('key');
                     $key        = ($key + 100);
                     $list_order = $key;
                 } else {
-                    $map         = [];
-                    $map[]       = ['id', '=', $params['id']];
-                    $config_info = Db::name('base_config')->where($map)->find();
+                    $map200      = [];
+                    $map200[]    = ['id', '=', $params['id']];
+                    $config_info = $this->configsModel->where($map200)->find();
                     $key         = $config_info['key'];
                     $list_order  = $config_info['list_order'];
                 }
@@ -315,64 +326,66 @@ class AdminIndexController extends PluginAdminBaseController
 
             if ($id) {
                 //编辑,检测是否重复,存在
-                $where   = [];
-                $where[] = ['id', '=', $id];
-                $config  = Db::name('base_config')->where($where)->find();
+                $map300   = [];
+                $map300[] = ['id', '=', $id];
+                $config   = $this->configsModel->where($map300)->find();
                 if ($config['name'] != $name) {
-                    $where2    = [];
-                    $where2[]  = ['name', '=', $name];
-                    $is_config = Db::name('base_config')->where($where2)->find();
+                    $map400    = [];
+                    $map400[]  = ['name', '=', $name];
+                    $is_config = $this->configsModel->where($map400)->find();
                     if ($is_config) $this->error("参数名[{$name}]已存在");
                 }
 
 
                 //编辑数据
                 $config_data = [
-                    'scatter'    => $scatter,
-                    'name'       => $name,
-                    'label'      => $label,
-                    'is_label'   => $is_label,
-                    'is_edit'    => $is_edit,
-                    'is_show'    => $is_show,
-                    'is_menu'    => $is_menu,
-                    'menu_name'  => $menu_name,
-                    'key'        => $key,
-                    'type'       => $type,
-                    'data'       => serialize($data),
-                    'group_id'   => $group_id,
-                    'about'      => $about,
-                    'list_order' => $list_order,
-                    'uridata'    => $uridata,
+                    'scatter'     => $scatter,
+                    'name'        => $name,
+                    'label'       => $label,
+                    'is_label'    => $is_label,
+                    'is_edit'     => $is_edit,
+                    'is_show'     => $is_show,
+                    'is_menu'     => $is_menu,
+                    'menu_name'   => $menu_name,
+                    'key'         => $key,
+                    'type'        => $type,
+                    'data'        => serialize($data),
+                    'group_id'    => $group_id,
+                    'about'       => $about,
+                    'list_order'  => $list_order,
+                    'uridata'     => $uridata,
+                    'update_time' => time(),
                 ];
-                $result      = Db::name('base_config')->where(['id' => $id])->update($config_data);
+                $result      = $this->configsModel->where(['id' => $id])->update($config_data);
             } else {
                 //添加数据
 
 
                 //检测是否存在
-                $where     = [];
-                $where[]   = ['name', '=', $name];
-                $is_config = Db::name('base_config')->where($where)->find();
+                $map500    = [];
+                $map500[]  = ['name', '=', $name];
+                $is_config = $this->configsModel->where($map500)->find();
                 if ($is_config) $this->error("参数名[{$name}]已存在");
 
 
                 $config_data = [
-                    'scatter'    => $scatter,
-                    'name'       => $name,
-                    'label'      => $label,
-                    'is_label'   => $is_label,
-                    'is_edit'    => $is_edit,
-                    'is_show'    => $is_show,
-                    'is_menu'    => $is_menu,
-                    'menu_name'  => $menu_name,
-                    'key'        => $key,
-                    'type'       => $type,
-                    'data'       => serialize($data),
-                    'group_id'   => $group_id,
-                    'about'      => $about,
-                    'list_order' => $list_order,
+                    'scatter'     => $scatter,
+                    'name'        => $name,
+                    'label'       => $label,
+                    'is_label'    => $is_label,
+                    'is_edit'     => $is_edit,
+                    'is_show'     => $is_show,
+                    'is_menu'     => $is_menu,
+                    'menu_name'   => $menu_name,
+                    'key'         => $key,
+                    'type'        => $type,
+                    'data'        => serialize($data),
+                    'group_id'    => $group_id,
+                    'about'       => $about,
+                    'list_order'  => $list_order,
+                    'create_time' => time(),
                 ];
-                $result      = Db::name('base_config')->strict(false)->insert($config_data);
+                $result      = $this->configsModel->strict(false)->insert($config_data);
             }
             $result === false && $this->error("操作失败");
             if ($params['post_group_id'] == 'site' || $params['group_id'] == 'site') $this->success("操作成功", cmf_plugin_url('Configs://AdminIndex/site', ['group_id' => $params['post_group_id']]));
@@ -392,6 +405,12 @@ class AdminIndexController extends PluginAdminBaseController
         $this->assign(input());
         $this->assign('group_id', input('group_id', '', 'intval'));
         $this->assign($config);
+        if ($config) {
+            foreach ($config->toArray() as $key => $value) {
+                $this->assign($key, $value);
+            }
+        }
+
 
 
         return $this->fetch('/add');
@@ -408,7 +427,10 @@ class AdminIndexController extends PluginAdminBaseController
         $params = $this->request->param();
         $map    = [];
         $map[]  = ['id', '=', $params['id']];
-        $result = Db::name('base_config')->where($map)->delete();
+        $result = $this->configsModel->where($map)->strict(false)->update([
+            'update_time' => time(),
+            'delete_time' => time(),
+        ]);
         $result === false && $this->error('操作失败!');
         if ($params['group_id'] == 'site') $this->success('操作成功!', cmf_plugin_url('Configs://AdminIndex/site', ['group_id' => $params['group_id']]));
 
@@ -426,7 +448,7 @@ class AdminIndexController extends PluginAdminBaseController
     {
         if (!$name || !$group_id) return false;
 
-        $data = Db::name('base_config')->where(['group_id' => $group_id, 'name' => $name])->find();
+        $data = $this->configsModel->where(['group_id' => $group_id, 'name' => $name])->find();
         if ($data) {
             unset($data['value']);
             $data['data'] = unserialize($data['data']);
@@ -452,7 +474,7 @@ class AdminIndexController extends PluginAdminBaseController
      */
     protected function getConfigIdInfo($id)
     {
-        $data = Db::name('base_config')->where(['id' => $id])->find();
+        $data = $this->configsModel->where(['id' => $id])->find();
         if ($data) {
             unset($data['value']);
             $data['data'] = unserialize($data['data']);
@@ -477,7 +499,7 @@ class AdminIndexController extends PluginAdminBaseController
      */
     private function getConfig($group_id = 1)
     {
-        $config = Db::name('base_config')->where(['group_id' => $group_id])->order("list_order")->select()->toArray();
+        $config = $this->configsModel->where(['group_id' => $group_id])->order("list_order")->select()->toArray();
         if ($config) {
             foreach ($config as &$item) {
                 $item['value'] = unserialize($item['value']);
@@ -503,7 +525,7 @@ class AdminIndexController extends PluginAdminBaseController
     {
         $map    = [];
         $map[]  = ['is_menu', 'in', [1, 3]];
-        $result = Db::name('base_config')->where($map)->order('list_order,id desc')->select();
+        $result = $this->configsModel->where($map)->order('list_order,id desc')->select();
 
         $this->assign('list', $result);
 
@@ -520,7 +542,7 @@ class AdminIndexController extends PluginAdminBaseController
 
         $map   = [];
         $map[] = ['is_menu', 'in', [1, 3]];
-        $list  = Db::name('base_config')->where($map)->select();
+        $list  = $this->configsModel->where($map)->select();
         $ids   = array_keys($params['ids']);//处理id值
         foreach ($list as $key => $value) {
             //默认线上可显示
@@ -529,7 +551,7 @@ class AdminIndexController extends PluginAdminBaseController
             //如果没有选择,状态改为本地可见
             if (!in_array($value['id'], $ids)) $is_menu = 3;
 
-            Db::name('base_config')->where('id', '=', $value['id'])->update([
+            $this->configsModel->where('id', '=', $value['id'])->update([
                 'is_menu' => $is_menu
             ]);
         }
@@ -539,7 +561,7 @@ class AdminIndexController extends PluginAdminBaseController
         $list_order = $this->request->param('list_order');
         if ($list_order) {
             foreach ($list_order as $k => $v) {
-                Db::name('base_config')->where(['id' => $k])->update(['list_order' => $v]);
+                $this->configsModel->where(['id' => $k])->update(['list_order' => $v]);
             }
         }
 
@@ -611,7 +633,7 @@ class AdminIndexController extends PluginAdminBaseController
         $this->assign('this_page_params', $thisPageParams);
 
         /*获取菜单栏(tab),即便是配置信息隐藏,这里也要展示*/
-        $list        = Db::name('base_config')->where('is_menu', 'in', [1, 2, 3])->select()->toArray();
+        $list        = $this->configsModel->where('is_menu', 'in', [1, 2, 3])->select()->toArray();
         $group_array = [];
         foreach ($list as $value) {
             $group_array[$value['key']] = $value['menu_name'];
@@ -686,7 +708,7 @@ class AdminIndexController extends PluginAdminBaseController
         $this->assign('this_page_params', $thisPageParams);
 
         /*获取菜单栏(tab),即便是配置信息隐藏,这里也要展示*/
-        $list        = Db::name('base_config')->where('is_menu', 'in', [1, 2, 3])->select()->toArray();
+        $list        = $this->configsModel->where('is_menu', 'in', [1, 2, 3])->select()->toArray();
         $group_array = [];
         foreach ($list as $value) {
             $group_array[$value['key']] = $value['menu_name'];
@@ -760,7 +782,7 @@ class AdminIndexController extends PluginAdminBaseController
         $this->assign('this_page_params', $thisPageParams);
 
         /*获取菜单栏(tab),即便是配置信息隐藏,这里也要展示*/
-        $list        = Db::name('base_config')->where('is_menu', 'in', [1, 2, 3])->select()->toArray();
+        $list        = $this->configsModel->where('is_menu', 'in', [1, 2, 3])->select()->toArray();
         $group_array = [];
         foreach ($list as $value) {
             $group_array[$value['key']] = $value['menu_name'];
@@ -834,7 +856,7 @@ class AdminIndexController extends PluginAdminBaseController
         $this->assign('this_page_params', $thisPageParams);
 
         /*获取菜单栏(tab),即便是配置信息隐藏,这里也要展示*/
-        $list        = Db::name('base_config')->where('is_menu', 'in', [1, 2, 3])->select()->toArray();
+        $list        = $this->configsModel->where('is_menu', 'in', [1, 2, 3])->select()->toArray();
         $group_array = [];
         foreach ($list as $value) {
             $group_array[$value['key']] = $value['menu_name'];
@@ -909,7 +931,7 @@ class AdminIndexController extends PluginAdminBaseController
 
 
         /*获取菜单栏(tab),即便是配置信息隐藏,这里也要展示*/
-        $list        = Db::name('base_config')->where('is_menu', 'in', [1, 2, 3])->select()->toArray();
+        $list        = $this->configsModel->where('is_menu', 'in', [1, 2, 3])->select()->toArray();
         $group_array = [];
         foreach ($list as $value) {
             $group_array[$value['key']] = $value['menu_name'];
@@ -985,7 +1007,7 @@ class AdminIndexController extends PluginAdminBaseController
 
 
         /*获取菜单栏(tab),即便是配置信息隐藏,这里也要展示*/
-        $list        = Db::name('base_config')->where('is_menu', 'in', [1, 2, 3])->select()->toArray();
+        $list        = $this->configsModel->where('is_menu', 'in', [1, 2, 3])->select()->toArray();
         $group_array = [];
         foreach ($list as $value) {
             $group_array[$value['key']] = $value['menu_name'];
