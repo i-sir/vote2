@@ -518,6 +518,7 @@ class ActivityLogController extends AuthController
         //3.年龄限制50岁 , 50岁以上不可以报名
         $age = $this->calculateAgeFromIdCard($params["id_number"]);
         if ($age > 50) $this->error("您已经50岁了,请勿再报名!");
+        $params['age'] = $age;
 
 
         //生成序列号
