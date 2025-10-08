@@ -27,7 +27,7 @@ class AssetModel extends Model
 
     //操作字段类型 && 如删除,后台自动不显示
     public $operate_type = [
-        'balance' => '余额',
+//        'balance' => '余额',
         'point'   => '积分',
     ];
 
@@ -40,7 +40,7 @@ class AssetModel extends Model
 
     //操作记录列表   && 如删除,后台列表自动不显示
     public $operate_type_log = [
-        'balance' => '余额',
+//        'balance' => '余额',
         'point'   => '积分',
     ];
 

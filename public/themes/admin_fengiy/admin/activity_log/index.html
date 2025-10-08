@@ -20,6 +20,28 @@
             </div>
         </div>
 
+
+        活动:
+        <div class="form-group">
+            <div class="layui-form-item">
+                <div class="col-md-6 col-sm-10" style="display: flex;margin-top: 10px;width: 180px;">
+                    <select name="activity_id" lay-search>
+                        <option value=""
+                        <if condition="$activity_id eq '' ">selected</if>
+                        >暂不选择</option>
+
+                        <foreach name="activity_list" key="key" item="vo">
+                            <option value="{$vo.id}"
+                            <if condition="$activity_id eq $vo.id ">selected</if>
+                            > {$vo.name}</option>
+                        </foreach>
+
+                    </select>
+                </div>
+            </div>
+        </div>
+
+
         <button type="submit" class="layui-btn" style="margin-left: 10px">搜索</button>
         <a class="layui-btn layui-bg-red" href="{:url('index',['pid'=>$pid,'params'=>$params])}">清空</a>
 
@@ -45,6 +67,7 @@
             <thead>
             <tr>
                 <th style="">ID</th>
+                <th style="">活动</th>
                 <th style="">用户信息</th>
                 <th style="">序号</th>
                 <th style="">姓名</th>
@@ -54,14 +77,14 @@
                 <th style="">宗教信仰</th>
                 <th style="">身份证</th>
                 <th style="">联系方式</th>
-                <th style="">所在地</th>
-                <th style="">报名赛道</th>
-                <th style="">兴趣爱好</th>
-                <th style="">情感状态</th>
-                <th style="">演舞经验</th>
-                <th style="">擅长的歌曲/特色</th>
-                <th style="">给自己贴个标签</th>
-                <th style="">平台账号</th>
+                <!--                <th style="">所在地</th>-->
+                <!--                <th style="">报名赛道</th>-->
+                <!--                <th style="">兴趣爱好</th>-->
+                <!--                <th style="">情感状态</th>-->
+                <!--                <th style="">演舞经验</th>-->
+                <!--                <th style="">擅长的歌曲/特色</th>-->
+                <!--                <th style="">给自己贴个标签</th>-->
+                <!--                <th style="">平台账号</th>-->
                 <th style="">照片</th>
                 <th style="">视频</th>
                 <th style="">投票数量</th>
@@ -74,6 +97,7 @@
             <foreach name="list" item="vo">
                 <tr>
                     <td>{$vo.id|default=''}</td>  <!--ID-->
+                    <td>{$vo.activity_name|default=''}</td>  <!--ID-->
                     <td>
                         <!--用户id-->
                         <if condition='!empty($vo.user_info)'>
@@ -100,14 +124,14 @@
                     <td>{$vo.religion|default=''}</td>  <!--宗教信仰-->
                     <td>{$vo.id_number|default=''}</td>  <!--身份证-->
                     <td>{$vo.phone|default=''}</td>  <!--联系方式-->
-                    <td>{$vo.location|default=''}</td>  <!--所在地-->
-                    <td>{$vo.track|default=''}</td>  <!--报名赛道-->
-                    <td>{$vo.interests|default=''}</td>  <!--兴趣爱好-->
-                    <td>{$vo.emotion|default=''}</td>  <!--情感状态-->
-                    <td>{$vo.dance|default=''}</td>  <!--演舞经验-->
-                    <td>{$vo.song|default=''}</td>  <!--擅长的歌曲/特色-->
-                    <td>{$vo.tag|default=''}</td>  <!--给自己贴个标签-->
-                    <td>{$vo.account|default=''}</td>  <!--平台账号-->
+                    <!--                    <td>{$vo.location|default=''}</td>  &lt;!&ndash;所在地&ndash;&gt;-->
+                    <!--                    <td>{$vo.track|default=''}</td>  &lt;!&ndash;报名赛道&ndash;&gt;-->
+                    <!--                    <td>{$vo.interests|default=''}</td>  &lt;!&ndash;兴趣爱好&ndash;&gt;-->
+                    <!--                    <td>{$vo.emotion|default=''}</td>  &lt;!&ndash;情感状态&ndash;&gt;-->
+                    <!--                    <td>{$vo.dance|default=''}</td>  &lt;!&ndash;演舞经验&ndash;&gt;-->
+                    <!--                    <td>{$vo.song|default=''}</td>  &lt;!&ndash;擅长的歌曲/特色&ndash;&gt;-->
+                    <!--                    <td>{$vo.tag|default=''}</td>  &lt;!&ndash;给自己贴个标签&ndash;&gt;-->
+                    <!--                    <td>{$vo.account|default=''}</td>  &lt;!&ndash;平台账号&ndash;&gt;-->
                     <td>
                         <!--照片-->
                         <if condition='!empty($vo.image)'>
@@ -139,6 +163,11 @@
                             >查看</a>
                         </if>
 
+
+
+                        <a class="layui-btn layui-btn-primary layui-border-orange layui-btn-xs"
+                           href="javascript:parent.openIframeLayer('{:url('activity_remark/index',array('log_id'=>$vo.id,'activity_id'=>$vo.activity_id))}','',{ area: ['65%', '85%'],move:'.layui-layer-title'},false);"
+                        >备注</a>
 
                     </td>
                 </tr>

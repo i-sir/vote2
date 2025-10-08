@@ -75,17 +75,17 @@
                     <td>{$vo.create_time|date='Y-m-d H:i:s'}</td>
 
                     <td>
-                        <a class="layui-btn layui-btn-primary layui-border-green layui-btn-xs"
-                           href="{:url('edit',['id'=>$vo.id,'page'=>$page,'params'=>$params])}">编辑</a>
+                        <!--                        <a class="layui-btn layui-btn-primary layui-border-green layui-btn-xs"-->
+                        <!--                           href="{:url('edit',['id'=>$vo.id,'page'=>$page,'params'=>$params])}">编辑</a>-->
 
-                        <a class="layui-btn layui-btn-primary layui-border-blue layui-btn-xs"
-                           href="javascript:parent.openIframeLayer('{:url('find',['id'=>$vo.id,'page'=>$page,'params'=>$params])}','查看',{ area: ['65%', '85%'],move:'.layui-layer-title'},false);"
-                        >查看</a>
+                        <!--                        <a class="layui-btn layui-btn-primary layui-border-blue layui-btn-xs"-->
+                        <!--                           href="javascript:parent.openIframeLayer('{:url('find',['id'=>$vo.id,'page'=>$page,'params'=>$params])}','查看',{ area: ['65%', '85%'],move:'.layui-layer-title'},false);"-->
+                        <!--                        >查看</a>-->
 
 
                         <if condition="APP_DEBUG">
-                            <a class="layui-btn layui-btn-primary layui-border-red layui-btn-xs js-ajax-delete"
-                               href="{:url('delete',array('id'=>$vo.id,'page'=>$page,'params'=>$params))}">删除</a>
+                            <!--                            <a class="layui-btn layui-btn-primary layui-border-red layui-btn-xs js-ajax-delete"-->
+                            <!--                               href="{:url('delete',array('id'=>$vo.id,'page'=>$page,'params'=>$params))}">删除</a>-->
                         </if>
 
 
@@ -99,11 +99,9 @@
                         >记录</a>
 
 
-
-
-                        <a class="layui-btn layui-btn-primary layui-border-purple layui-btn-xs"
-                           href="javascript:parent.openIframeLayer('{:url('children',array('pid'=>$vo.id))}','[{$vo.nickname}]关系',{ area: ['65%', '85%'],move:'.layui-layer-title'},false);"
-                        >关系</a>
+                        <!--                        <a class="layui-btn layui-btn-primary layui-border-purple layui-btn-xs"-->
+                        <!--                           href="javascript:parent.openIframeLayer('{:url('children',array('pid'=>$vo.id))}','[{$vo.nickname}]关系',{ area: ['65%', '85%'],move:'.layui-layer-title'},false);"-->
+                        <!--                        >关系</a>-->
                     </td>
                 </tr>
             </foreach>

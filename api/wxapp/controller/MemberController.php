@@ -351,4 +351,52 @@ class MemberController extends AuthController
     }
 
 
+    /**
+     * 排名列表
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     * @OA\Post(
+     *     tags={"会员中心模块"},
+     *     path="/wxapp/member/ranking",
+     *
+     *
+     *
+     *     @OA\Parameter(
+     *         name="openid",
+     *         in="query",
+     *         description="openid",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="string",
+     *         )
+     *     ),
+     *
+     *
+     *     @OA\Response(response="200", description="An example resource"),
+     *     @OA\Response(response="default", description="An example resource")
+     * )
+     *
+     *   test_environment: http://vote2.ikun:9090/api/wxapp/member/ranking
+     *   official_environment: http://xcxkf220.aubye.com/api/wxapp/member/ranking
+     *   api: /wxapp/member/ranking
+     *   remark_name: 排名列表
+     *
+     */
+    public function ranking()
+    {
+        $MemberModel = new \initmodel\MemberModel();//用户管理
+        $MemberInit  = new \init\MemberInit();//用户管理
+
+
+        $params          = $this->request->param();
+        $params['limit'] = 100;
+        $params['order'] = 'point desc,id desc';
+
+        $result = $MemberInit->get_list([], $params);
+
+        $this->success("请求成功!", $result);
+    }
+
+
 }

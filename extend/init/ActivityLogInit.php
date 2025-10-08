@@ -50,6 +50,7 @@ class ActivityLogInit extends Base
     {
         $ActivityVoteModel = new \initmodel\ActivityVoteModel(); //投票记录   (ps:InitModel)
         $MemberInit        = new \init\MemberInit();//会员管理 (ps:InitController)
+        $ActivityModel     = new \initmodel\ActivityModel(); //活动管理   (ps:InitModel)
 
 
         //接口类型
@@ -63,6 +64,10 @@ class ActivityLogInit extends Base
 
 
         /** 处理文字描述 **/
+        //活动
+        $activity_info         = $ActivityModel->where(['id' => $item['activity_id']])->find();
+        $item['activity_info'] = $activity_info;
+        $item['activity_name'] = $activity_info['name'];
 
 
         //查询用户信息

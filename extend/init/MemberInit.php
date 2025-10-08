@@ -20,7 +20,7 @@ use think\Response;
  */
 class MemberInit extends Base
 {
-    protected $Field         = 'id,avatar,nickname,phone,openid,create_time';//过滤字段,默认全部
+    protected $Field         = 'id,avatar,nickname,phone,point,openid,create_time';//过滤字段,默认全部
     protected $Limit         = 100000;//如不分页,展示条数
     protected $PageSize      = 15;//分页每页,数据条数
     protected $Order         = 'id desc';//排序
@@ -44,6 +44,7 @@ class MemberInit extends Base
     {
         $MemberModel       = new \initmodel\MemberModel(); //会员管理  (ps:InitModel)
         $ActivityVoteModel = new \initmodel\ActivityVoteModel(); //投票记录   (ps:InitModel)
+        $SignModel         = new \initmodel\SignModel(); //签到管理   (ps:InitModel)
 
         //传入id直接查询
         if (is_string($where) || is_int($where)) $where = ["id" => (int)$where];
@@ -56,12 +57,55 @@ class MemberInit extends Base
 
         if ($item['tag']) $item['tag'] = json_decode($item['tag'], true);
 
+
+        $date = date("Y-m-d");
+
         //自己剩余票数
         $daily_voting_count  = cmf_config('daily_voting_count'); //每日投票数
         $map                 = [];
         $map[]               = ['user_id', '=', $item['id']];
-        $map[]               = ['date', '=', date("Y-m-d")];
+        $map[]               = ['date', '=', $date];
         $item['vote_number'] = $daily_voting_count - ($ActivityVoteModel->where($map)->count() ?? 0);
+
+
+        //检测今日是否签到
+        $item['is_sign'] = false;
+        $map100          = [];
+        $map100[]        = ['user_id', '=', $item['id']];
+        $map100[]        = ['sign_date', '=', $date];
+        $sign            = $SignModel->where($map100)->count();
+        if ($sign) $item['is_sign'] = true;
+
+
+        //连续签到天数
+        $map200     = [];
+        $map200[]   = ['user_id', '=', $item['id']];
+        $map200[]   = ['sign_date', '=', date('Y-m-d', strtotime('yesterday'))];
+        $lastSignIn = $SignModel->where($map200)->order('sign_date desc,id desc')->find();
+
+        if ($item['is_sign']) {
+            // 今天已签到
+            if ($lastSignIn) {
+                // 昨天有签到记录，连续天数 = 昨天的连续天数 + 1
+                $item['consecutive_days'] = $lastSignIn['consecutive_days'] + 1;
+            } else {
+                // 昨天没有签到记录，今天重新开始连续签到
+                $item['consecutive_days'] = 1;
+            }
+        } else {
+            // 今天未签到
+            if ($lastSignIn) {
+                // 昨天有签到记录，显示昨天的连续天数（表示当前连续签到状态）
+                $item['consecutive_days'] = $lastSignIn['consecutive_days'];
+            } else {
+                // 昨天也没有签到记录，连续天数为0
+                $item['consecutive_days'] = 0;
+            }
+        }
+
+        //累计签到天数
+        $item['total_days'] = $SignModel->where(['user_id' => $item['id']])->count();
+
 
         return $item;
     }
