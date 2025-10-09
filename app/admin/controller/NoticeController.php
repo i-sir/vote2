@@ -5,20 +5,20 @@ namespace app\admin\controller;
 
 /**
  * @adminMenuRoot(
- *     "name"                =>"ActivityLog",
- *     "name_underline"      =>"activity_log",
- *     "controller_name"     =>"ActivityLog",
- *     "table_name"          =>"activity_log",
+ *     "name"                =>"Notice",
+ *     "name_underline"      =>"notice",
+ *     "controller_name"     =>"Notice",
+ *     "table_name"          =>"notice",
  *     "action"              =>"default",
  *     "parent"              =>"",
  *     "display"             => true,
  *     "order"               => 10000,
  *     "icon"                =>"none",
- *     "remark"              =>"报名记录",
+ *     "remark"              =>"通知管理",
  *     "author"              =>"",
- *     "create_time"         =>"2025-10-07 17:49:34",
+ *     "create_time"         =>"2025-10-09 11:28:41",
  *     "version"             =>"1.0",
- *     "use"                 => new \app\admin\controller\ActivityLogController();
+ *     "use"                 => new \app\admin\controller\NoticeController();
  * )
  */
 
@@ -27,11 +27,11 @@ use think\facade\Db;
 use cmf\controller\AdminBaseController;
 
 
-class ActivityLogController extends AdminBaseController
+class NoticeController extends AdminBaseController
 {
 
     // public function initialize(){
-    //	//报名记录
+    //	//通知管理
     //	parent::initialize();
     //	}
 
@@ -41,10 +41,7 @@ class ActivityLogController extends AdminBaseController
      */
     protected function base_index()
     {
-        $ActivityInit = new \init\ActivityInit();//活动管理    (ps:InitController)
-        $map          = [];
-        $map[]        = ['id', '<>', 0];
-        $this->assign('activity_list', $ActivityInit->get_list($map, ['order' => 'is_show,id desc']));
+
     }
 
     /**
@@ -60,14 +57,14 @@ class ActivityLogController extends AdminBaseController
     /**
      * 首页列表数据
      * @adminMenu(
-     *     'name'             => 'ActivityLog',
-     *     'name_underline'   => 'activity_log',
+     *     'name'             => 'Notice',
+     *     'name_underline'   => 'notice',
      *     'parent'           => 'index',
      *     'display'          => true,
      *     'hasView'          => true,
      *     'order'            => 10000,
      *     'icon'             => '',
-     *     'remark'           => '报名记录',
+     *     'remark'           => '通知管理',
      *     'param'            => ''
      * )
      */
@@ -76,16 +73,14 @@ class ActivityLogController extends AdminBaseController
         $this->base_index();//处理基础信息
 
 
-        $ActivityLogInit  = new \init\ActivityLogInit();//报名记录    (ps:InitController)
-        $ActivityLogModel = new \initmodel\ActivityLogModel(); //报名记录   (ps:InitModel)
-
-        $params = $this->request->param();
+        $NoticeInit  = new \init\NoticeInit();//通知管理    (ps:InitController)
+        $NoticeModel = new \initmodel\NoticeModel(); //通知管理   (ps:InitModel)
+        $params      = $this->request->param();
 
         /** 查询条件 **/
         $where = [];
         //$where[]=["type","=", 1];
-        if ($params["keyword"]) $where[] = ["username|gender|birth|nation|id_number|phone|location|track|account", "like", "%{$params["keyword"]}%"];
-        if ($params["activity_id"]) $where[] = ["activity_id", "=", $params["activity_id"]];
+        if ($params["keyword"]) $where[] = ["name", "like", "%{$params["keyword"]}%"];
         if ($params["test"]) $where[] = ["test", "=", $params["test"]];
 
 
@@ -101,11 +96,11 @@ class ActivityLogController extends AdminBaseController
 
 
         /** 导出数据 **/
-        if ($params["is_export"]) $ActivityLogInit->export_excel($where, $params);
+        if ($params["is_export"]) $NoticeInit->export_excel($where, $params);
 
 
         /** 查询数据 **/
-        $result = $ActivityLogInit->get_list_paginate($where, $params);
+        $result = $NoticeInit->get_list_paginate($where, $params);
 
 
         /** 数据渲染 **/
@@ -130,18 +125,18 @@ class ActivityLogController extends AdminBaseController
     //添加提交
     public function add_post()
     {
-        $ActivityLogInit  = new \init\ActivityLogInit();//报名记录   (ps:InitController)
-        $ActivityLogModel = new \initmodel\ActivityLogModel(); //报名记录   (ps:InitModel)
-        $params           = $this->request->param();
+        $NoticeInit  = new \init\NoticeInit();//通知管理   (ps:InitController)
+        $NoticeModel = new \initmodel\NoticeModel(); //通知管理   (ps:InitModel)
+        $params      = $this->request->param();
 
 
         /** 检测参数信息 **/
-        $validateResult = $this->validate($params, 'ActivityLog');
+        $validateResult = $this->validate($params, 'Notice');
         if ($validateResult !== true) $this->error($validateResult);
 
 
         /** 插入数据 **/
-        $result = $ActivityLogInit->admin_edit_post($params);
+        $result = $NoticeInit->admin_edit_post($params);
         if (empty($result)) $this->error("失败请重试");
 
         $this->success("保存成功", "index{$this->params_url}");
@@ -153,9 +148,9 @@ class ActivityLogController extends AdminBaseController
     {
         $this->base_edit();//处理基础信息
 
-        $ActivityLogInit  = new \init\ActivityLogInit();//报名记录    (ps:InitController)
-        $ActivityLogModel = new \initmodel\ActivityLogModel(); //报名记录   (ps:InitModel)
-        $params           = $this->request->param();
+        $NoticeInit  = new \init\NoticeInit();//通知管理    (ps:InitController)
+        $NoticeModel = new \initmodel\NoticeModel(); //通知管理   (ps:InitModel)
+        $params      = $this->request->param();
 
         /** 查询条件 **/
         $where   = [];
@@ -164,36 +159,7 @@ class ActivityLogController extends AdminBaseController
         /** 查询数据 **/
         $params["InterfaceType"] = "admin";//接口类型
         $params["DataFormat"]    = "find";//数据格式,find详情,list列表
-        $result                  = $ActivityLogInit->get_find($where, $params);
-        if (empty($result)) $this->error("暂无数据");
-
-        /** 数据格式转数组 **/
-        $toArray = $result->toArray();
-        foreach ($toArray as $k => $v) {
-            $this->assign($k, $v);
-        }
-
-        return $this->fetch();
-    }
-
-
-    //查看详情
-    public function video()
-    {
-        $this->base_edit();//处理基础信息
-
-        $ActivityLogInit  = new \init\ActivityLogInit();//报名记录    (ps:InitController)
-        $ActivityLogModel = new \initmodel\ActivityLogModel(); //报名记录   (ps:InitModel)
-        $params           = $this->request->param();
-
-        /** 查询条件 **/
-        $where   = [];
-        $where[] = ["id", "=", $params["id"]];
-
-        /** 查询数据 **/
-        $params["InterfaceType"] = "admin";//接口类型
-        $params["DataFormat"]    = "find";//数据格式,find详情,list列表
-        $result                  = $ActivityLogInit->get_find($where, $params);
+        $result                  = $NoticeInit->get_find($where, $params);
         if (empty($result)) $this->error("暂无数据");
 
         /** 数据格式转数组 **/
@@ -211,9 +177,9 @@ class ActivityLogController extends AdminBaseController
     {
         $this->base_edit();//处理基础信息
 
-        $ActivityLogInit  = new \init\ActivityLogInit();//报名记录  (ps:InitController)
-        $ActivityLogModel = new \initmodel\ActivityLogModel(); //报名记录   (ps:InitModel)
-        $params           = $this->request->param();
+        $NoticeInit  = new \init\NoticeInit();//通知管理  (ps:InitController)
+        $NoticeModel = new \initmodel\NoticeModel(); //通知管理   (ps:InitModel)
+        $params      = $this->request->param();
 
         /** 查询条件 **/
         $where   = [];
@@ -222,7 +188,7 @@ class ActivityLogController extends AdminBaseController
         /** 查询数据 **/
         $params["InterfaceType"] = "admin";//接口类型
         $params["DataFormat"]    = "find";//数据格式,find详情,list列表
-        $result                  = $ActivityLogInit->get_find($where, $params);
+        $result                  = $NoticeInit->get_find($where, $params);
         if (empty($result)) $this->error("暂无数据");
 
         /** 数据格式转数组 **/
@@ -238,13 +204,13 @@ class ActivityLogController extends AdminBaseController
     //提交编辑
     public function edit_post()
     {
-        $ActivityLogInit  = new \init\ActivityLogInit();//报名记录   (ps:InitController)
-        $ActivityLogModel = new \initmodel\ActivityLogModel(); //报名记录   (ps:InitModel)
-        $params           = $this->request->param();
+        $NoticeInit  = new \init\NoticeInit();//通知管理   (ps:InitController)
+        $NoticeModel = new \initmodel\NoticeModel(); //通知管理   (ps:InitModel)
+        $params      = $this->request->param();
 
 
         /** 检测参数信息 **/
-        $validateResult = $this->validate($params, 'ActivityLog');
+        $validateResult = $this->validate($params, 'Notice');
         if ($validateResult !== true) $this->error($validateResult);
 
 
@@ -254,7 +220,7 @@ class ActivityLogController extends AdminBaseController
 
 
         /** 提交数据 **/
-        $result = $ActivityLogInit->admin_edit_post($params, $where);
+        $result = $NoticeInit->admin_edit_post($params, $where);
         if (empty($result)) $this->error("失败请重试");
 
         $this->success("保存成功", "index{$this->params_url}");
@@ -264,16 +230,16 @@ class ActivityLogController extends AdminBaseController
     //提交(副本,无任何操作) 编辑&添加
     public function edit_post_two()
     {
-        $ActivityLogInit  = new \init\ActivityLogInit();//报名记录   (ps:InitController)
-        $ActivityLogModel = new \initmodel\ActivityLogModel(); //报名记录   (ps:InitModel)
-        $params           = $this->request->param();
+        $NoticeInit  = new \init\NoticeInit();//通知管理   (ps:InitController)
+        $NoticeModel = new \initmodel\NoticeModel(); //通知管理   (ps:InitModel)
+        $params      = $this->request->param();
 
         /** 更改数据条件 && 或$params中存在id本字段可以忽略 **/
         $where = [];
         if ($params['id']) $where[] = ['id', '=', $params['id']];
 
         /** 提交数据 **/
-        $result = $ActivityLogInit->edit_post_two($params, $where);
+        $result = $NoticeInit->edit_post_two($params, $where);
         if (empty($result)) $this->error("失败请重试");
 
         $this->success("保存成功", "index{$this->params_url}");
@@ -283,9 +249,9 @@ class ActivityLogController extends AdminBaseController
     //驳回
     public function refuse()
     {
-        $ActivityLogInit  = new \init\ActivityLogInit();//报名记录  (ps:InitController)
-        $ActivityLogModel = new \initmodel\ActivityLogModel(); //报名记录   (ps:InitModel)
-        $params           = $this->request->param();
+        $NoticeInit  = new \init\NoticeInit();//通知管理  (ps:InitController)
+        $NoticeModel = new \initmodel\NoticeModel(); //通知管理   (ps:InitModel)
+        $params      = $this->request->param();
 
         /** 查询条件 **/
         $where   = [];
@@ -295,7 +261,7 @@ class ActivityLogController extends AdminBaseController
         /** 查询数据 **/
         $params["InterfaceType"] = "admin";//接口类型
         $params["DataFormat"]    = "find";//数据格式,find详情,list列表
-        $result                  = $ActivityLogInit->get_find($where, $params);
+        $result                  = $NoticeInit->get_find($where, $params);
         if (empty($result)) $this->error("暂无数据");
 
         /** 数据格式转数组 **/
@@ -311,9 +277,9 @@ class ActivityLogController extends AdminBaseController
     //驳回,更改状态
     public function audit_post()
     {
-        $ActivityLogInit  = new \init\ActivityLogInit();//报名记录   (ps:InitController)
-        $ActivityLogModel = new \initmodel\ActivityLogModel(); //报名记录   (ps:InitModel)
-        $params           = $this->request->param();
+        $NoticeInit  = new \init\NoticeInit();//通知管理   (ps:InitController)
+        $NoticeModel = new \initmodel\NoticeModel(); //通知管理   (ps:InitModel)
+        $params      = $this->request->param();
 
         /** 更改数据条件 && 或$params中存在id本字段可以忽略 **/
         $where = [];
@@ -323,7 +289,7 @@ class ActivityLogController extends AdminBaseController
         /** 查询数据 **/
         $params["InterfaceType"] = "admin";//接口类型
         $params["DataFormat"]    = "find";//数据格式,find详情,list列表
-        $item                    = $ActivityLogInit->get_find($where);
+        $item                    = $NoticeInit->get_find($where);
         if (empty($item)) $this->error("暂无数据");
 
         /** 通过&拒绝时间 **/
@@ -331,7 +297,7 @@ class ActivityLogController extends AdminBaseController
         if ($params['status'] == 3) $params['refuse_time'] = time();
 
         /** 提交数据 **/
-        $result = $ActivityLogInit->edit_post_two($params, $where);
+        $result = $NoticeInit->edit_post_two($params, $where);
         if (empty($result)) $this->error("失败请重试");
 
         $this->success("操作成功");
@@ -340,15 +306,15 @@ class ActivityLogController extends AdminBaseController
     //删除
     public function delete()
     {
-        $ActivityLogInit  = new \init\ActivityLogInit();//报名记录   (ps:InitController)
-        $ActivityLogModel = new \initmodel\ActivityLogModel(); //报名记录   (ps:InitModel)
-        $params           = $this->request->param();
+        $NoticeInit  = new \init\NoticeInit();//通知管理   (ps:InitController)
+        $NoticeModel = new \initmodel\NoticeModel(); //通知管理   (ps:InitModel)
+        $params      = $this->request->param();
 
         if ($params["id"]) $id = $params["id"];
         if (empty($params["id"])) $id = $this->request->param("ids/a");
 
         /** 删除数据 **/
-        $result = $ActivityLogInit->delete_post($id);
+        $result = $NoticeInit->delete_post($id);
         if (empty($result)) $this->error("失败请重试");
 
         $this->success("删除成功");//   , "index{$this->params_url}"
@@ -358,15 +324,15 @@ class ActivityLogController extends AdminBaseController
     //批量操作
     public function batch_post()
     {
-        $ActivityLogInit  = new \init\ActivityLogInit();//报名记录   (ps:InitController)
-        $ActivityLogModel = new \initmodel\ActivityLogModel(); //报名记录   (ps:InitModel)
-        $params           = $this->request->param();
+        $NoticeInit  = new \init\NoticeInit();//通知管理   (ps:InitController)
+        $NoticeModel = new \initmodel\NoticeModel(); //通知管理   (ps:InitModel)
+        $params      = $this->request->param();
 
         $id = $this->request->param("id/a");
         if (empty($id)) $id = $this->request->param("ids/a");
 
         //提交编辑
-        $result = $ActivityLogInit->batch_post($id, $params);
+        $result = $NoticeInit->batch_post($id, $params);
         if (empty($result)) $this->error("失败请重试");
 
         $this->success("保存成功");//   , "index{$this->params_url}"
@@ -376,12 +342,12 @@ class ActivityLogController extends AdminBaseController
     //更新排序
     public function list_order_post()
     {
-        $ActivityLogInit  = new \init\ActivityLogInit();//报名记录   (ps:InitController)
-        $ActivityLogModel = new \initmodel\ActivityLogModel(); //报名记录   (ps:InitModel)
-        $params           = $this->request->param("list_order/a");
+        $NoticeInit  = new \init\NoticeInit();//通知管理   (ps:InitController)
+        $NoticeModel = new \initmodel\NoticeModel(); //通知管理   (ps:InitModel)
+        $params      = $this->request->param("list_order/a");
 
         //提交更新
-        $result = $ActivityLogInit->list_order_post($params);
+        $result = $NoticeInit->list_order_post($params);
         if (empty($result)) $this->error("失败请重试");
 
         $this->success("保存成功"); //   , "index{$this->params_url}"

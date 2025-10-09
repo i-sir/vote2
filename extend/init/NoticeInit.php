@@ -5,15 +5,15 @@ namespace init;
 
 /**
  * @Init(
- *     "name"            =>"ActivityLog",
- *     "name_underline"  =>"activity_log",
- *     "table_name"      =>"activity_log",
- *     "model_name"      =>"ActivityLogModel",
- *     "remark"          =>"报名记录",
+ *     "name"            =>"Notice",
+ *     "name_underline"  =>"notice",
+ *     "table_name"      =>"notice",
+ *     "model_name"      =>"NoticeModel",
+ *     "remark"          =>"通知管理",
  *     "author"          =>"",
- *     "create_time"     =>"2025-10-07 17:49:34",
+ *     "create_time"     =>"2025-10-09 11:28:41",
  *     "version"         =>"1.0",
- *     "use"             => new \init\ActivityLogInit();
+ *     "use"             => new \init\NoticeInit();
  * )
  */
 
@@ -21,23 +21,24 @@ use think\facade\Db;
 use app\admin\controller\ExcelController;
 
 
-class ActivityLogInit extends Base
+class NoticeInit extends Base
 {
 
-    public $status = [1 => '进行中', 2 => '已结束'];
+    public $is_show = [1 => '是', 2 => '否'];//显示
+
 
     protected $Field         = "*";//过滤字段,默认全部
     protected $Limit         = 100000;//如不分页,展示条数
     protected $PageSize      = 15;//分页每页,数据条数
-    protected $Order         = "vote_number desc,id";//排序
+    protected $Order         = "list_order,id desc";//排序
     protected $InterfaceType = "api";//接口类型:admin=后台,api=前端
     protected $DataFormat    = "find";//数据格式,find详情,list列表
 
     //本init和model
     public function _init()
     {
-        $ActivityLogInit  = new \init\ActivityLogInit();//报名记录   (ps:InitController)
-        $ActivityLogModel = new \initmodel\ActivityLogModel(); //报名记录  (ps:InitModel)
+        $NoticeInit  = new \init\NoticeInit();//通知管理   (ps:InitController)
+        $NoticeModel = new \initmodel\NoticeModel(); //通知管理  (ps:InitModel)
     }
 
     /**
@@ -48,9 +49,6 @@ class ActivityLogInit extends Base
      */
     public function common_item($item = [], $params = [])
     {
-        $ActivityVoteModel = new \initmodel\ActivityVoteModel(); //投票记录   (ps:InitModel)
-        $MemberInit        = new \init\MemberInit();//会员管理 (ps:InitController)
-        $ActivityInit  = new \init\ActivityInit();//活动管理    (ps:InitController)
 
 
         //接口类型
@@ -60,39 +58,19 @@ class ActivityLogInit extends Base
 
 
         /** 数据格式(公共部分),find详情&&list列表 共存数据 **/
-        $item['status_name'] = $this->status[$item['status']] ?? '';
 
 
         /** 处理文字描述 **/
-        //活动
-        $activity_info         = $ActivityInit->get_find(['id' => $item['activity_id']]);
-        $item['activity_info'] = $activity_info;
-        $item['activity_name'] = $activity_info['name'];
-
-
-        //查询用户信息
-        $user_info         = $MemberInit->get_find(['id' => $item['user_id']]);
-        $item['user_info'] = $user_info;
+        $item['is_show_name'] = $this->is_show[$item['is_show']];//显示
 
 
         /** 处理数据 **/
         if ($this->InterfaceType == 'api') {
             /** api处理文件 **/
-            if ($item['image']) $item['image'] = cmf_get_asset_url($item['image']);//照片
-            if ($item['video']) $item['video'] = cmf_get_asset_url($item['video']);//视频
 
+            if ($item['mp3']) $item['mp3'] = cmf_get_asset_url($item['mp3']);
 
             /** 处理富文本 **/
-            //身份证加密,手机号加密
-            $item['id_number'] = '*';
-            $item['phone']     = '*';
-
-
-            //我对ta投票数量
-            $map                    = [];
-            $map[]                  = ['log_id', '=', $item['id']];
-            $map[]                  = ['user_id', '=', $params['user_id']];
-            $item['my_vote_number'] = $ActivityVoteModel->where($map)->count();
 
 
             if ($this->DataFormat == 'find') {
@@ -142,11 +120,11 @@ class ActivityLogInit extends Base
      */
     public function get_list($where = [], $params = [])
     {
-        $ActivityLogModel = new \initmodel\ActivityLogModel(); //报名记录  (ps:InitModel)
+        $NoticeModel = new \initmodel\NoticeModel(); //通知管理  (ps:InitModel)
 
 
         /** 查询数据 **/
-        $result = $ActivityLogModel
+        $result = $NoticeModel
             ->where($where)
             ->order($params['order'] ?? $this->Order)
             ->field($params['field'] ?? $this->Field)
@@ -156,10 +134,6 @@ class ActivityLogInit extends Base
 
                 /** 处理公共数据 **/
                 $item = $this->common_item($item, $params);
-
-                //排名
-                $item['ranking'] = $key + 1;
-
 
                 return $item;
             });
@@ -180,11 +154,11 @@ class ActivityLogInit extends Base
      */
     public function get_list_paginate($where = [], $params = [])
     {
-        $ActivityLogModel = new \initmodel\ActivityLogModel(); //报名记录  (ps:InitModel)
+        $NoticeModel = new \initmodel\NoticeModel(); //通知管理  (ps:InitModel)
 
 
         /** 查询数据 **/
-        $result = $ActivityLogModel
+        $result = $NoticeModel
             ->where($where)
             ->order($params['order'] ?? $this->Order)
             ->field($params['field'] ?? $this->Field)
@@ -193,10 +167,6 @@ class ActivityLogInit extends Base
 
                 /** 处理公共数据 **/
                 $item = $this->common_item($item, $params);
-
-                //排名
-                $item['ranking'] = $key + 1;
-
 
                 return $item;
             });
@@ -217,10 +187,10 @@ class ActivityLogInit extends Base
      */
     public function get_join_list($where = [], $params = [])
     {
-        $ActivityLogModel = new \initmodel\ActivityLogModel(); //报名记录  (ps:InitModel)
+        $NoticeModel = new \initmodel\NoticeModel(); //通知管理  (ps:InitModel)
 
         /** 查询数据 **/
-        $result = $ActivityLogModel
+        $result = $NoticeModel
             ->alias('a')
             ->join('member b', 'a.user_id = b.id')
             ->where($where)
@@ -252,14 +222,14 @@ class ActivityLogInit extends Base
      */
     public function get_find($where = [], $params = [])
     {
-        $ActivityLogModel = new \initmodel\ActivityLogModel(); //报名记录  (ps:InitModel)
+        $NoticeModel = new \initmodel\NoticeModel(); //通知管理  (ps:InitModel)
 
         /** 可直接传id,或者where条件 **/
         if (is_string($where) || is_int($where)) $where = ["id" => (int)$where];
         if (empty($where)) return false;
 
         /** 查询数据 **/
-        $item = $ActivityLogModel
+        $item = $NoticeModel
             ->where($where)
             ->order($params['order'] ?? $this->Order)
             ->field($params['field'] ?? $this->Field)
@@ -324,7 +294,7 @@ class ActivityLogInit extends Base
      */
     public function edit_post($params, $where = [])
     {
-        $ActivityLogModel = new \initmodel\ActivityLogModel(); //报名记录  (ps:InitModel)
+        $NoticeModel = new \initmodel\NoticeModel(); //通知管理  (ps:InitModel)
 
 
         /** 查询详情数据 && 需要再打开 **/
@@ -341,17 +311,17 @@ class ActivityLogInit extends Base
         if (!empty($where)) {
             //传入where条件,根据条件更新数据
             $params["update_time"] = time();
-            $result                = $ActivityLogModel->where($where)->strict(false)->update($params);
+            $result                = $NoticeModel->where($where)->strict(false)->update($params);
             //if ($result) $result = $item["id"];
         } elseif (!empty($params["id"])) {
             //如传入id,根据id编辑数据
             $params["update_time"] = time();
-            $result                = $ActivityLogModel->where("id", "=", $params["id"])->strict(false)->update($params);
+            $result                = $NoticeModel->where("id", "=", $params["id"])->strict(false)->update($params);
             //if($result) $result = $item["id"];
         } else {
             //无更新条件则添加数据
             $params["create_time"] = time();
-            $result                = $ActivityLogModel->strict(false)->insert($params, true);
+            $result                = $NoticeModel->strict(false)->insert($params, true);
         }
 
         return $result;
@@ -366,7 +336,7 @@ class ActivityLogInit extends Base
      */
     public function edit_post_two($params, $where = [])
     {
-        $ActivityLogModel = new \initmodel\ActivityLogModel(); //报名记录  (ps:InitModel)
+        $NoticeModel = new \initmodel\NoticeModel(); //通知管理  (ps:InitModel)
 
 
         /** 可直接传id,或者where条件 **/
@@ -379,15 +349,15 @@ class ActivityLogInit extends Base
         if (!empty($where)) {
             //传入where条件,根据条件更新数据
             $params["update_time"] = time();
-            $result                = $ActivityLogModel->where($where)->strict(false)->update($params);
+            $result                = $NoticeModel->where($where)->strict(false)->update($params);
         } elseif (!empty($params["id"])) {
             //如传入id,根据id编辑数据
             $params["update_time"] = time();
-            $result                = $ActivityLogModel->where("id", "=", $params["id"])->strict(false)->update($params);
+            $result                = $NoticeModel->where("id", "=", $params["id"])->strict(false)->update($params);
         } else {
             //无更新条件则添加数据
             $params["create_time"] = time();
-            $result                = $ActivityLogModel->strict(false)->insert($params);
+            $result                = $NoticeModel->strict(false)->insert($params);
         }
 
         return $result;
@@ -403,11 +373,11 @@ class ActivityLogInit extends Base
      */
     public function delete_post($id, $type = 1, $params = [])
     {
-        $ActivityLogModel = new \initmodel\ActivityLogModel(); //报名记录  (ps:InitModel)
+        $NoticeModel = new \initmodel\NoticeModel(); //通知管理  (ps:InitModel)
 
 
-        if ($type == 1) $result = $ActivityLogModel->destroy($id);//软删除 数据表字段必须有delete_time
-        if ($type == 2) $result = $ActivityLogModel->destroy($id, true);//真实删除
+        if ($type == 1) $result = $NoticeModel->destroy($id);//软删除 数据表字段必须有delete_time
+        if ($type == 2) $result = $NoticeModel->destroy($id, true);//真实删除
 
         return $result;
     }
@@ -421,14 +391,14 @@ class ActivityLogInit extends Base
      */
     public function batch_post($id, $params = [])
     {
-        $ActivityLogModel = new \initmodel\ActivityLogModel(); //报名记录  (ps:InitModel)
+        $NoticeModel = new \initmodel\NoticeModel(); //通知管理  (ps:InitModel)
 
         $where   = [];
         $where[] = ["id", "in", $id];//$id 为数组
 
 
         $params["update_time"] = time();
-        $result                = $ActivityLogModel->where($where)->strict(false)->update($params);//修改状态
+        $result                = $NoticeModel->where($where)->strict(false)->update($params);//修改状态
 
         return $result;
     }
@@ -442,12 +412,12 @@ class ActivityLogInit extends Base
      */
     public function list_order_post($list_order, $params = [])
     {
-        $ActivityLogModel = new \initmodel\ActivityLogModel(); //报名记录   (ps:InitModel)
+        $NoticeModel = new \initmodel\NoticeModel(); //通知管理   (ps:InitModel)
 
         foreach ($list_order as $k => $v) {
             $where   = [];
             $where[] = ["id", "=", $k];
-            $result  = $ActivityLogModel->where($where)->strict(false)->update(["list_order" => $v, "update_time" => time()]);//排序
+            $result  = $NoticeModel->where($where)->strict(false)->update(["list_order" => $v, "update_time" => time()]);//排序
         }
 
         return $result;
@@ -460,10 +430,10 @@ class ActivityLogInit extends Base
      */
     public function export_excel($where = [], $params = [])
     {
-        $ActivityLogInit  = new \init\ActivityLogInit();//报名记录   (ps:InitController)
-        $ActivityLogModel = new \initmodel\ActivityLogModel(); //报名记录  (ps:InitModel)
+        $NoticeInit  = new \init\NoticeInit();//通知管理   (ps:InitController)
+        $NoticeModel = new \initmodel\NoticeModel(); //通知管理  (ps:InitModel)
 
-        $result = $ActivityLogInit->get_list($where, $params);
+        $result = $NoticeInit->get_list($where, $params);
 
         $result = $result->toArray();
         foreach ($result as $k => &$item) {
@@ -501,7 +471,7 @@ class ActivityLogInit extends Base
         //        ];
 
         $Excel = new ExcelController();
-        $Excel->excelExports($result, $headArrValue, ["fileName" => "报名记录"]);
+        $Excel->excelExports($result, $headArrValue, ["fileName" => "通知管理"]);
     }
 
 }

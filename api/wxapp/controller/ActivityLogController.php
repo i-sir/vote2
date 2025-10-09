@@ -92,6 +92,34 @@ class ActivityLogController extends AuthController
      *
      *
      *
+     *    @OA\Parameter(
+     *         name="is_me",
+     *         in="query",
+     *         description="true  自己报名",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="string",
+     *         )
+     *     ),
+     *
+     *
+     *
+     *
+     *
+     *    @OA\Parameter(
+     *         name="status",
+     *         in="query",
+     *         description="状态:状态:1进行中,2已结束",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="string",
+     *         )
+     *     ),
+     *
+     *
+     *
+     *
+     *
      *
      *
      *
@@ -135,7 +163,7 @@ class ActivityLogController extends AuthController
      */
     public function find_log_list()
     {
-        $this->checkAuth();
+        //$this->checkAuth();
 
         $ActivityLogInit  = new \init\ActivityLogInit();//报名记录   (ps:InitController)
         $ActivityLogModel = new \initmodel\ActivityLogModel(); //报名记录   (ps:InitModel)
@@ -147,7 +175,7 @@ class ActivityLogController extends AuthController
         /** 查询条件 **/
         $where   = [];
         $where[] = ['id', '>', 0];
-        //$where[] = ['user_id', '=', $this->user_id];
+        if ($params['is_me']) $where[] = ['user_id', '=', $this->user_id];
         if ($params["keyword"]) $where[] = ["number|username", "like", "%{$params['keyword']}%"];
         if ($params["activity_id"]) $where[] = ["activity_id", "=", $params["activity_id"]];
         if ($params["status"]) $where[] = ["status", "=", $params["status"]];
@@ -501,10 +529,8 @@ class ActivityLogController extends AuthController
 
         if ($card_result) {
             // 处理验证结果
-            if (!$card_result['result']['isok']) {
-                // 验证失败
-                $this->error("验证失败!");
-            }
+            if (!$card_result['result']['isok']) $this->error("验证失败!");// 验证失败
+
 
             //身份证扩展信息
             $IdCardInfor = $card_result['result']['IdCardInfor'];

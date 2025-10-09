@@ -1,0 +1,34 @@
+<!--名称-->
+<div class="form-group">
+    <label class="col-sm-2 control-label">名称:</label>
+    <div class="layui-input-block col-sm-6">
+        <input type="text" name="name" class="form-control post-params item-left" value="{$name|default=''}">
+    </div>
+</div>
+
+
+
+<!--音频-->
+<div class="form-group">
+    <label class="col-sm-2 control-label">音频:</label>
+    <div class="layui-input-block col-sm-6">
+        <input id="audio-00000001" class="form-control post-params" type="text" name="mp3"
+               readonly="readonly" value="{$mp3|default=''}" placeholder="请上传音频">
+        <notempty name="$mp3">
+            <a id="audio-preview" href="{:cmf_get_file_download_url($mp3)}"
+               target="_blank">下载</a>
+        </notempty>
+        <a href="javascript:uploadOne('视频上传','#audio-00000001','audio');">上传</a>
+        <a onclick="$('#audio-00000001').val('');return false;">取消</a>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+

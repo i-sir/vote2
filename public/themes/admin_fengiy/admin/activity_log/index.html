@@ -151,7 +151,9 @@
                                target="_blank">下载</a>
                             </a>
                             <else/>
-                            暂无上传
+                            <a class="remark" style="color: red;"
+                               href="javascript:parent.openIframeLayer('{:url('video',['id'=>$vo.id])}','',{ area: ['65%', '85%'],move:'.layui-layer-title'},true);"
+                            >上传视频</a>
                         </if>
                     </td>
                     <td>{$vo.vote_number|default=''}</td>  <!--投票数量-->
