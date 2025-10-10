@@ -115,7 +115,7 @@ class VideoController extends AuthController
         $params["DataFormat"]    = "list";//数据格式,find详情,list列表
         $params["field"]         = "*";//过滤字段
         $result = $VideoClassInit->get_list($where, $params);
-        if (empty($result)) $this->error("暂无信息!");
+        if (empty($result)) $this->success("暂无信息!",[]);
 
         $this->success("请求成功!", $result);
     }
@@ -139,6 +139,9 @@ class VideoController extends AuthController
      *             type="string",
      *         )
      *     ),
+     *
+     *
+     *
      *
      *
      *
@@ -209,7 +212,7 @@ class VideoController extends AuthController
         $params["DataFormat"]    = "list";//数据格式,find详情,list列表
         $params["field"]         = "*";//过滤字段
         $result                  = $VideoClassInit->get_plugin_list($where, $params);
-        if (empty($result)) $this->error("暂无信息!");
+        if (empty($result)) $this->success("暂无信息!",[]);
 
         $this->success("请求成功!", $result);
     }
@@ -315,7 +318,7 @@ class VideoController extends AuthController
         $params["field"]         = "*";//过滤字段
         if ($params['is_paginate']) $result = $VideoInit->get_list($where, $params);
         if (empty($params['is_paginate'])) $result = $VideoInit->get_list_paginate($where, $params);
-        if (empty($result)) $this->error("暂无信息!");
+        if (empty($result)) $this->success("暂无信息!",[]);
 
         $this->success("请求成功!", $result);
     }

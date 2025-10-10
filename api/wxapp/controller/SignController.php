@@ -265,7 +265,6 @@ class SignController extends AuthController
     {
         $SignModel = new \initmodel\SignModel(); //签到管理   (ps:InitModel)
 
-
         // 处理输入格式，确保是 'YYYY-MM' 格式
         $date = date('Y-m', strtotime($yearMonth));
         if (!$date) {
@@ -288,6 +287,8 @@ class SignController extends AuthController
             //日期
             $sign_date = date('Y-m-d', strtotime("{$date}-{$i}"));
 
+            //获取周几（数字格式：1=周一，7=周日）
+            $weekday = date('N', strtotime($sign_date));
 
             //是否签到
             $is_sign = false;
@@ -300,12 +301,12 @@ class SignController extends AuthController
             $days[] = [
                 'date'    => $sign_date,
                 'day'     => $i, // 单独的天数（数字格式）
+                'weekday' => $weekday, // 周几（数字格式：1=周一，7=周日）
                 'is_sign' => $is_sign,//是否签到 0为未签到
             ];
         }
 
         return $days;
     }
-
 
 }

@@ -126,7 +126,7 @@ class ActivityVoteController extends AuthController
         $params["DataFormat"]    = "list";//数据格式,find详情,list列表
         $params["field"]         = "*";//过滤字段
         $result                  = $ActivityVoteInit->get_join_list2($where, $params);
-        if (empty($result)) $this->error("暂无信息!");
+        if (empty($result)) $this->success("暂无信息!",[]);
 
         $this->success("请求成功!", $result);
     }
@@ -197,7 +197,7 @@ class ActivityVoteController extends AuthController
         $params["DataFormat"]    = "list";//数据格式,find详情,list列表
         $params["field"]         = "*";//过滤字段
         $result                  = $ActivityVoteInit->get_join_list($where, $params);
-        if (empty($result)) $this->error("暂无信息!");
+        if (empty($result)) $this->success("暂无信息!",[]);
 
         $this->success("请求成功!", $result);
     }

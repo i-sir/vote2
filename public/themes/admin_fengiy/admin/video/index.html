@@ -62,6 +62,7 @@
                 <th style="">名称</th>
                 <th style="">封面</th>
                 <th style="">视频</th>
+                <th style="">首页推荐</th>
                 <th style="">显示</th>
                 <th style="">创建时间</th>
 
@@ -107,6 +108,16 @@
                             <input type='checkbox' lay-skin='switch' lay-text='是|否' lay-filter='is_show' name='is_show'
                                    value='{$vo.id}'
                             <if condition='$vo.is_show == 1'>checked</if>
+                            >
+                        </div>
+                    </td>
+                    <td>
+                        <!--首页推荐-->
+                        <div class='layui-form'>
+                            <input type='checkbox' lay-skin='switch' lay-text='是|否' lay-filter='is_index'
+                                   name='is_index'
+                                   value='{$vo.id}'
+                            <if condition='$vo.is_index == 1'>checked</if>
                             >
                         </div>
                     </td>
@@ -156,6 +167,11 @@
         //显示
         form.on('switch(is_show)', function (data) {
             batchPost(data.value, 'is_show', this.checked ? 1 : 2)
+        });
+
+        //首页推荐
+        form.on('switch(is_index)', function (data) {
+            batchPost(data.value, 'is_index', this.checked ? 1 : 2)
         });
 
 

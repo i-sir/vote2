@@ -169,6 +169,7 @@ class VideoClassInit extends Base
                 /** 处理公共数据 **/
                 $map                = [];
                 $map[]              = ['class_id', '=', $item['id']];
+                $map[]              = ['is_index', '=', 1];
                 $item['video_list'] = $VideoInit->get_list($map);
 
                 return $item;
