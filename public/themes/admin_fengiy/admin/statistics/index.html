@@ -78,19 +78,19 @@
         </div>
     </div>
 
-    <!-- 第一行饼图 -->
+    <!-- 第一行饼图：改为 xs4（25%宽度），3个容器总宽 75%，剩余25%留空 -->
     <div class="layui-row">
-        <div class="layui-col-xs3" id="proportion_data" style="height: 350px;width: 33%;margin-top: 2%;"></div>
-        <div class="layui-col-xs3" id="vip_data" style="height: 350px;width: 33%;margin-top: 2%;"></div>
-        <div class="layui-col-xs3" id="shop_data" style="height: 350px;width: 33%;margin-top: 2%;"></div>
+        <!-- layui-col-xs4 对应 12/4=3列，宽度 25% -->
+        <div class="layui-col-xs4" id="proportion_data" style="height: 350px;margin-top: 2%;"></div>
+        <div class="layui-col-xs4" id="vip_data" style="height: 350px;margin-top: 2%;"></div>
+        <div class="layui-col-xs4" id="track_proportion_data" style="height: 350px;margin-top: 2%;"></div>
     </div>
 
-    <!-- 第二行饼图 - 新增的四个饼图 -->
+    <!-- 第二行饼图：保持 xs4（25%宽度），3个容器总宽 75%，与第一行对齐 -->
     <div class="layui-row">
-        <div class="layui-col-xs3" id="track_proportion_data" style="height: 350px;width: 25%;margin-top: 2%;"></div>
-        <div class="layui-col-xs3" id="hobbies_proportion_data" style="height: 350px;width: 25%;margin-top: 2%;"></div>
-        <div class="layui-col-xs3" id="emotional_proportion_data" style="height: 350px;width: 25%;margin-top: 2%;"></div>
-        <div class="layui-col-xs3" id="label_proportion_data" style="height: 350px;width: 25%;margin-top: 2%;"></div>
+        <div class="layui-col-xs4" id="hobbies_proportion_data" style="height: 350px;margin-top: 2%;"></div>
+        <div class="layui-col-xs4" id="emotional_proportion_data" style="height: 350px;margin-top: 2%;"></div>
+        <div class="layui-col-xs4" id="label_proportion_data" style="height: 350px;margin-top: 2%;"></div>
     </div>
 
     <div style="text-align: center;margin-top: 4%;font-size: 25px;">
