@@ -187,7 +187,7 @@ class ActivityLogController extends AuthController
         $params["field"]         = "*";//过滤字段
         if ($params['is_paginate']) $result = $ActivityLogInit->get_list($where, $params);
         if (empty($params['is_paginate'])) $result = $ActivityLogInit->get_list_paginate($where, $params);
-        if (empty($result)) $this->success("暂无信息!",[]);
+        if (empty($result)) $this->success("暂无信息!", []);
 
         $this->success("请求成功!", $result);
     }
@@ -516,20 +516,26 @@ class ActivityLogController extends AuthController
         if (!$this->validateIdCard($params["id_number"])) $this->error("身份证号格式错误!");
 
 
-        //1.不可以报名多次
+        // 1.不可以报名多次
         $map       = [];
         $map[]     = ['user_id', '=', $this->user_id];
         $map[]     = ['activity_id', '=', $params["activity_id"]];
         $is_attend = $ActivityLogModel->where($map)->count();
         if ($is_attend) $this->error("您已经报名过了!");
 
+        // 2.年龄限制50岁 , 50岁以上不可以报名
+        $age_restriction = cmf_config('age_restriction'); //年龄限制
+        $age             = $this->calculateAgeFromIdCard($params["id_number"]);
+        if ($age > $age_restriction) $this->error("超过设定{$age_restriction}岁,请勿再报名!");
+        $params['age'] = $age;
 
-        //2.身份证和名字一致,直接审核通过
+
+        // 3.身份证和名字一致,直接审核通过
         $card_result = $this->verifyIdCard($params['id_number'], $params['username'], $this->appCode);
 
         if ($card_result) {
             // 处理验证结果
-            if (!$card_result['result']['isok']) $this->error("验证失败!");// 验证失败
+            if (!$card_result['result']['isok']) $this->error("身份证验证失败!");// 验证失败
 
 
             //身份证扩展信息
@@ -541,15 +547,27 @@ class ActivityLogController extends AuthController
         }
 
 
-        //3.年龄限制50岁 , 50岁以上不可以报名
-        $age = $this->calculateAgeFromIdCard($params["id_number"]);
-        if ($age > 50) $this->error("您已经50岁了,请勿再报名!");
-        $params['age'] = $age;
-
-
         //生成序列号
         $max_number       = $ActivityLogModel->where('activity_id', $params["activity_id"])->max('number') ?? 0;
         $params["number"] = $max_number + 1;
+
+
+        //查找省市区code
+        $province_info = Db::name('region')->where('name', '=', $params['province'])->find();
+        $city_info     = Db::name('region')->where('name', '=', $params['city'])->find();
+        $county_info   = Db::name('region')->where('name', '=', $params['county'])->find();
+        //name
+        $params['province'] = $province_info['name'];
+        $params['city']     = $city_info['name'];
+        $params['county']   = $county_info['name'];
+        //id
+        $params['province_id'] = $province_info['id'];
+        $params['city_id']     = $city_info['id'];
+        $params['county_id']   = $county_info['id'];
+        //code
+        $params['province_code'] = $province_info['code'];
+        $params['city_code']     = $city_info['code'];
+        $params['county_code']   = $county_info['code'];
 
         /** 提交更新 **/
         $result = $ActivityLogInit->api_edit_post($params);

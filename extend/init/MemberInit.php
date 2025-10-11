@@ -65,7 +65,7 @@ class MemberInit extends Base
         $map                 = [];
         $map[]               = ['user_id', '=', $item['id']];
         $map[]               = ['date', '=', $date];
-        $item['vote_number'] = $daily_voting_count - ($ActivityVoteModel->where($map)->count() ?? 0);
+        $item['vote_number'] = $daily_voting_count - ($ActivityVoteModel->where($map)->sum('number') ?? 0);
 
 
         //检测今日是否签到

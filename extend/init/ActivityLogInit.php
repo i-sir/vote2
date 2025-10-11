@@ -50,7 +50,7 @@ class ActivityLogInit extends Base
     {
         $ActivityVoteModel = new \initmodel\ActivityVoteModel(); //投票记录   (ps:InitModel)
         $MemberInit        = new \init\MemberInit();//会员管理 (ps:InitController)
-        $ActivityInit  = new \init\ActivityInit();//活动管理    (ps:InitController)
+        $ActivityInit      = new \init\ActivityInit();//活动管理    (ps:InitController)
 
 
         //接口类型
@@ -92,7 +92,7 @@ class ActivityLogInit extends Base
             $map                    = [];
             $map[]                  = ['log_id', '=', $item['id']];
             $map[]                  = ['user_id', '=', $params['user_id']];
-            $item['my_vote_number'] = $ActivityVoteModel->where($map)->count();
+            $item['my_vote_number'] = $ActivityVoteModel->where($map)->sum('number');
 
 
             if ($this->DataFormat == 'find') {
@@ -112,8 +112,17 @@ class ActivityLogInit extends Base
             if ($this->DataFormat == 'find') {
                 /** find详情数据格式 **/
 
+                //如果有其他 ,将其他内容显示一下
+                if (strpos($item['emotion'], '其他') !== false) {
+                    preg_match('/\((.*?)\)/', $item['emotion'], $matches);
+                    $item['emotion_other'] = $matches[1];
+                }
 
-                /** 处理富文本 **/
+                if (strpos($item['tag'], '其他') !== false){
+                    preg_match('/\((.*?)\)/', $item['tag'], $matches);
+                    $item['tag_other'] = $matches[1];
+                }
+
 
 
             } else {

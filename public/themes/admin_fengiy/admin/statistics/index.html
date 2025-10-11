@@ -4,6 +4,38 @@
 <body>
 <div class="wrap js-check-wrap">
 
+    <form class="well form-inline margin-top-20 layui-form ajax-form w-form-search" method="get" autocomplete="off">
+        活动:
+        <div class="form-group">
+            <div class="layui-form-item">
+                <div class="col-md-6 col-sm-10" style="display: flex;margin-top: 10px;width: 180px;">
+                    <select name="activity_id" lay-search>
+                        <option value=""
+                        <if condition="$activity_id eq '' ">selected</if>
+                        >暂不选择</option>
+
+                        <foreach name="activity_list" key="key" item="vo">
+                            <option value="{$vo.id}"
+                            <if condition="$activity_id eq $vo.id ">selected</if>
+                            > {$vo.name}</option>
+                        </foreach>
+
+                    </select>
+                </div>
+            </div>
+        </div>
+
+
+        <button type="submit" class="layui-btn" style="margin-left: 10px">搜索</button>
+        <a class="layui-btn layui-bg-red" href="{:url('index',['pid'=>$pid,'params'=>$params])}">清空</a>
+
+
+        <!--        <a class="layui-btn layui-bg-blue ajax-export" href="javascript:;">导出</a>-->
+
+        <!-- 如有导出需把  筛选条件在这里用input回显,input需隐藏-->
+        <input type="hidden" name="is_export" class="is_export" value="0">
+        <input type="hidden" name="pid" value="{$pid}">
+    </form>
 
     <!--总统计-->
     <div class="layui-row layui-col-space20">
@@ -46,13 +78,20 @@
         </div>
     </div>
 
-
+    <!-- 第一行饼图 -->
     <div class="layui-row">
         <div class="layui-col-xs3" id="proportion_data" style="height: 350px;width: 33%;margin-top: 2%;"></div>
         <div class="layui-col-xs3" id="vip_data" style="height: 350px;width: 33%;margin-top: 2%;"></div>
         <div class="layui-col-xs3" id="shop_data" style="height: 350px;width: 33%;margin-top: 2%;"></div>
     </div>
 
+    <!-- 第二行饼图 - 新增的四个饼图 -->
+    <div class="layui-row">
+        <div class="layui-col-xs3" id="track_proportion_data" style="height: 350px;width: 25%;margin-top: 2%;"></div>
+        <div class="layui-col-xs3" id="hobbies_proportion_data" style="height: 350px;width: 25%;margin-top: 2%;"></div>
+        <div class="layui-col-xs3" id="emotional_proportion_data" style="height: 350px;width: 25%;margin-top: 2%;"></div>
+        <div class="layui-col-xs3" id="label_proportion_data" style="height: 350px;width: 25%;margin-top: 2%;"></div>
+    </div>
 
     <div style="text-align: center;margin-top: 4%;font-size: 25px;">
         用户注册增长
@@ -78,24 +117,6 @@
     </div>
     <div id="vote" style="height: 450px;"></div>
 
-
-
-    <!--    <div style="text-align: center;margin-top: 4%;color: red;font-size: 25px;">-->
-    <!--        <a href="{:url('excel/repurchase_rate_export')}" Target="_blank"-->
-    <!--           style="color: red; text-decoration: none;cursor: pointer;">技师复购排行</a>-->
-    <!--    </div>-->
-    <!--    <div id="add_order_repurchase_technician" style="height: 500px;"></div>-->
-
-
-
-    <!--    <div style="text-align: center;margin-top: 4%;color: red;font-size: 25px;">-->
-    <!--        <a href="{:url('excel/project_export')}" Target="_blank"-->
-    <!--           style="color: red; text-decoration: none;cursor: pointer;">项目下单排行</a>-->
-    <!--    </div>-->
-    <!--    <div id="project" style="height: 500px;"></div>-->
-
-
-
 </div>
 <script src="__STATIC__/js/admin.js"></script>
 <script src="__TMPL__/public/assets/simpleboot3/js/adminindex.js"></script>
@@ -114,7 +135,6 @@
 </script>
 </body>
 </html>
-
 
 <!--饼图,男女比例-->
 <script type="text/javascript">
@@ -136,10 +156,6 @@
         tooltip: {
             trigger: 'item'
         },
-        // legend: {
-        //     orient: 'vertical',
-        //     left: 'left'
-        // },
         series: [
             {
                 type: 'pie',
@@ -183,10 +199,6 @@
         tooltip: {
             trigger: 'item'
         },
-        // legend: {
-        //     orient: 'vertical',
-        //     left: 'left'
-        // },
         series: [
             {
                 type: 'pie',
@@ -230,15 +242,185 @@
         tooltip: {
             trigger: 'item'
         },
-        // legend: {
-        //     orient: 'vertical',
-        //     left: 'left'
-        // },
         series: [
             {
                 type: 'pie',
                 radius: '50%',
                 data: shop_data,
+                emphasis: {
+                    itemStyle: {
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    }
+                }
+            }
+        ]
+    };
+
+    if (option && typeof option === 'object') {
+        myChart.setOption(option);
+    }
+
+    window.addEventListener('resize', myChart.resize);
+</script>
+
+<!-- 新增的四个饼图 -->
+
+<!--饼图,报名赛道比例-->
+<script type="text/javascript">
+    var dom = document.getElementById('track_proportion_data');
+    var myChart = echarts.init(dom, null, {
+        renderer: 'canvas',
+        useDirtyRect: false
+    });
+    var app = {};
+    var option;
+
+    var track_proportion_data = {$track_proportion_data};
+
+    option = {
+        title: {
+            text: '报名赛道比例',
+            left: 'center'
+        },
+        tooltip: {
+            trigger: 'item'
+        },
+        series: [
+            {
+                type: 'pie',
+                radius: '50%',
+                data: track_proportion_data,
+                emphasis: {
+                    itemStyle: {
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    }
+                }
+            }
+        ]
+    };
+
+    if (option && typeof option === 'object') {
+        myChart.setOption(option);
+    }
+
+    window.addEventListener('resize', myChart.resize);
+</script>
+
+<!--饼图,兴趣爱好比例-->
+<script type="text/javascript">
+    var dom = document.getElementById('hobbies_proportion_data');
+    var myChart = echarts.init(dom, null, {
+        renderer: 'canvas',
+        useDirtyRect: false
+    });
+    var app = {};
+    var option;
+
+    var hobbies_proportion_data = {$hobbies_proportion_data};
+
+    option = {
+        title: {
+            text: '兴趣爱好比例',
+            left: 'center'
+        },
+        tooltip: {
+            trigger: 'item'
+        },
+        series: [
+            {
+                type: 'pie',
+                radius: '50%',
+                data: hobbies_proportion_data,
+                emphasis: {
+                    itemStyle: {
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    }
+                }
+            }
+        ]
+    };
+
+    if (option && typeof option === 'object') {
+        myChart.setOption(option);
+    }
+
+    window.addEventListener('resize', myChart.resize);
+</script>
+
+<!--饼图,情感状态比例-->
+<script type="text/javascript">
+    var dom = document.getElementById('emotional_proportion_data');
+    var myChart = echarts.init(dom, null, {
+        renderer: 'canvas',
+        useDirtyRect: false
+    });
+    var app = {};
+    var option;
+
+    var emotional_proportion_data = {$emotional_proportion_data};
+
+    option = {
+        title: {
+            text: '情感状态比例',
+            left: 'center'
+        },
+        tooltip: {
+            trigger: 'item'
+        },
+        series: [
+            {
+                type: 'pie',
+                radius: '50%',
+                data: emotional_proportion_data,
+                emphasis: {
+                    itemStyle: {
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    }
+                }
+            }
+        ]
+    };
+
+    if (option && typeof option === 'object') {
+        myChart.setOption(option);
+    }
+
+    window.addEventListener('resize', myChart.resize);
+</script>
+
+<!--饼图,报名标签比例-->
+<script type="text/javascript">
+    var dom = document.getElementById('label_proportion_data');
+    var myChart = echarts.init(dom, null, {
+        renderer: 'canvas',
+        useDirtyRect: false
+    });
+    var app = {};
+    var option;
+
+    var label_proportion_data = {$label_proportion_data};
+
+    option = {
+        title: {
+            text: '报名标签比例',
+            left: 'center'
+        },
+        tooltip: {
+            trigger: 'item'
+        },
+        series: [
+            {
+                type: 'pie',
+                radius: '50%',
+                data: label_proportion_data,
                 emphasis: {
                     itemStyle: {
                         shadowBlur: 10,

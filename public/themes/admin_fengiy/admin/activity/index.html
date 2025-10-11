@@ -58,11 +58,11 @@
             <thead>
             <tr>
                 <th style="">ID</th>
-                <th style="">名称</th>
+<!--                <th style="">名称</th>-->
                 <th style="">图片介绍</th>
                 <th style="">投票开始时间</th>
                 <th style="">投票结束时间</th>
-                <th style="">活动开始时间</th>
+                <!--                <th style="">活动开始时间</th>-->
                 <th style="">活动结束时间</th>
                 <th style="">显示</th>
                 <th style="">创建时间</th>
@@ -75,23 +75,23 @@
                 <tr>
                     <td>{$vo.id|default=''}</td>  <!--ID-->
                     <td>{$vo.name|default=''}</td>  <!--名称-->
-                    <td>
-                        <!--图片介绍-->
-                        <if condition='!empty($vo.image)'>
-                            <a href="javascript:imagePreviewDialog('{:cmf_get_asset_url($vo.image)}');">
-                                <img src='{:cmf_get_asset_url($vo.image)}' style='height:40px;'>
-                            </a>
-                            <else/>
-                            暂无上传
-                        </if>
-                    </td>
+<!--                    <td>-->
+<!--                        &lt;!&ndash;图片介绍&ndash;&gt;-->
+<!--                        <if condition='!empty($vo.image)'>-->
+<!--                            <a href="javascript:imagePreviewDialog('{:cmf_get_asset_url($vo.image)}');">-->
+<!--                                <img src='{:cmf_get_asset_url($vo.image)}' style='height:40px;'>-->
+<!--                            </a>-->
+<!--                            <else/>-->
+<!--                            暂无上传-->
+<!--                        </if>-->
+<!--                    </td>-->
                     <td>{:isset($vo.attend_begin_time) && $vo.attend_begin_time > 10000 ? date('Y-m-d H:i',
                         $vo.attend_begin_time) : ''}
                     </td>  <!--投票开始时间-->
                     <td>{:isset($vo.attend_end_time) && $vo.attend_end_time > 10000 ? date('Y-m-d H:i',
                         $vo.attend_end_time) : ''}
                     </td>  <!--投票结束时间-->
-                    <td>{:isset($vo.begin_time) && $vo.begin_time > 10000 ? date('Y-m-d', $vo.begin_time) : ''}</td>
+                    <!--                    <td>{:isset($vo.begin_time) && $vo.begin_time > 10000 ? date('Y-m-d', $vo.begin_time) : ''}</td>-->
                     <!--活动开始时间-->
                     <td>{:isset($vo.end_time) && $vo.end_time > 10000 ? date('Y-m-d', $vo.end_time) : ''}</td>
                     <!--活动结束时间-->

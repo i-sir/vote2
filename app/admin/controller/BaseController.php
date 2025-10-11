@@ -104,7 +104,7 @@ class BaseController extends AdminBaseController
      * @param string $table_name 表名|如为空,控制器必须和model名一致
      * @return string 唯一编号
      */
-    protected function get_num_only($field_name = 'order_num', $length = 4, $type = 1, $prefix = '', $table_name = '')
+    public function get_num_only($field_name = 'order_num', $length = 4, $type = 1, $prefix = '', $table_name = '')
     {
         static $attempts = 0;
         $attempts++;

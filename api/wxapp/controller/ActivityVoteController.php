@@ -126,7 +126,7 @@ class ActivityVoteController extends AuthController
         $params["DataFormat"]    = "list";//数据格式,find详情,list列表
         $params["field"]         = "*";//过滤字段
         $result                  = $ActivityVoteInit->get_join_list2($where, $params);
-        if (empty($result)) $this->success("暂无信息!",[]);
+        if (empty($result)) $this->success("暂无信息!", []);
 
         $this->success("请求成功!", $result);
     }
@@ -197,7 +197,7 @@ class ActivityVoteController extends AuthController
         $params["DataFormat"]    = "list";//数据格式,find详情,list列表
         $params["field"]         = "*";//过滤字段
         $result                  = $ActivityVoteInit->get_join_list($where, $params);
-        if (empty($result)) $this->success("暂无信息!",[]);
+        if (empty($result)) $this->success("暂无信息!", []);
 
         $this->success("请求成功!", $result);
     }
@@ -302,8 +302,8 @@ class ActivityVoteController extends AuthController
         $map   = [];
         $map[] = ['user_id', '=', $this->user_id];
         $map[] = ['date', '=', date("Y-m-d")];
-        $count = $ActivityVoteModel->where($map)->count();
-        if ($count >= $daily_voting_count) $this->error("每日投票数不能超过" . $daily_voting_count . "个");
+        $count = $ActivityVoteModel->where($map)->sum('number');
+        if ($count + $params['number'] > $daily_voting_count) $this->error("每日投票数不能超过" . $daily_voting_count . "个");
 
 
         //增加投票数量

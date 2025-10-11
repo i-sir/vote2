@@ -3,7 +3,9 @@
 <div class="wrap js-check-wrap">
     <ul class="nav nav-tabs">
         <li class="active"><a href="{:url('index',['pid'=>$pid,'params'=>$params])}">报名记录</a></li>
-
+        <if condition="cmf_auth_check(cmf_get_current_admin_id(),'admin/activity_log/add')">
+            <li><a href="{:url('add',['pid'=>$pid,'params'=>$params])}">添加</a></li>
+        </if>
 
     </ul>
 
@@ -114,7 +116,7 @@
                                 </div>
                             </div>
                             <else/>
-                            已删除
+                            后台添加
                         </if>
                     </td>
                     <td>{$vo.number|default=''}</td>  <!--序号-->
@@ -168,6 +170,9 @@
                         </if>
 
 
+                        <a class="layui-btn layui-btn-primary layui-border-blue layui-btn-xs"
+                           href="javascript:parent.openIframeLayer('{:url('edit',['id'=>$vo.id,'pid'=>$pid,'page'=>$page,'params'=>$params])}','查看',{ area: ['65%', '85%'],move:'.layui-layer-title'},true);"
+                        >修改</a>
 
                         <a class="layui-btn layui-btn-primary layui-border-orange layui-btn-xs"
                            href="javascript:parent.openIframeLayer('{:url('activity_remark/index',array('log_id'=>$vo.id,'activity_id'=>$vo.activity_id))}','',{ area: ['65%', '85%'],move:'.layui-layer-title'},false);"
