@@ -25,6 +25,7 @@ class ActivityLogInit extends Base
 {
 
     public $status = [1 => '进行中', 2 => '已结束'];
+    public $order_list = ['vote_number' => '投票正序', 'vote_number desc' => '投票倒序','id'=>'ID正序','id desc'=>'ID倒序'];
 
     protected $Field         = "*";//过滤字段,默认全部
     protected $Limit         = 100000;//如不分页,展示条数

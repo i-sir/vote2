@@ -44,6 +44,26 @@
         </div>
 
 
+        排序:
+        <div class="form-group">
+            <div class="layui-form-item">
+                <div class="col-md-6 col-sm-10" style="display: flex;margin-top: 10px;width: 180px;">
+                    <select name="order" lay-search>
+                        <option value=""
+                        <if condition="$order eq '' ">selected</if>
+                        >暂不选择</option>
+                        <foreach name="order_list" key="key" item="vo">
+                            <option value="{$key}"
+                            <if condition="$order eq $key ">selected</if>
+                            > {$vo}</option>
+                        </foreach>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+
+
         <button type="submit" class="layui-btn" style="margin-left: 10px">搜索</button>
         <a class="layui-btn layui-bg-red" href="{:url('index',['pid'=>$pid,'params'=>$params])}">清空</a>
 

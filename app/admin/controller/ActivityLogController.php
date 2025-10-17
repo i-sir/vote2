@@ -67,6 +67,11 @@ class ActivityLogController extends AdminBaseController
         $map          = [];
         $map[]        = ['id', '<>', 0];
         $this->assign('activity_list', $ActivityInit->get_list($map, ['order' => 'is_show,id desc']));
+
+
+        $ActivityLogInit = new \init\ActivityLogInit();//报名记录    (ps:InitController)
+        $this->assign('order_list', $ActivityLogInit->order_list);
+
     }
 
     /**
@@ -395,7 +400,7 @@ class ActivityLogController extends AdminBaseController
         // 2.年龄限制50岁 , 50岁以上不可以报名
         $age_restriction = cmf_config('age_restriction'); //年龄限制
         $age             = $this->calculateAgeFromIdCard($params["id_number"]);
-        if ($age > $age_restriction) $this->error("超过设定{$age_restriction}岁,请勿再报名!");
+        if ($age < $age_restriction) $this->error("设定{$age_restriction}岁未满足,请勿再报名!");
         $params['age'] = $age;
 
 

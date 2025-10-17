@@ -49,8 +49,16 @@ class ActivityLogController extends AuthController
         $ActivityLogModel = new \initmodel\ActivityLogModel(); //报名记录   (ps:InitModel)
 
         $result = [];
+        // 2.年龄限制50岁 , 50岁以上不可以报名
+        $age_restriction = cmf_config('age_restriction'); //年龄限制
+        $age             = $this->calculateAgeFromIdCard('360102197610253315');
+        dump($age);exit();
+        if ($age < $age_restriction) $this->error("设定{$age_restriction}岁未满足,请勿再报名!");
+        $params['age'] = $age;
 
-        $this->success('报名记录-接口请求成功', $result);
+
+
+        $this->success('报名记录-接口请求成功', $params);
     }
 
 
@@ -682,7 +690,6 @@ class ActivityLogController extends AuthController
      */
     function calculateAgeFromIdCard($idCard)
     {
-
 
         // 从身份证号中提取出生日期（第7-14位）
         $birthYear  = substr($idCard, 6, 4);
