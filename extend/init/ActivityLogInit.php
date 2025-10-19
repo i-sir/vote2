@@ -24,8 +24,8 @@ use app\admin\controller\ExcelController;
 class ActivityLogInit extends Base
 {
 
-    public $status = [1 => '进行中', 2 => '已结束'];
-    public $order_list = ['vote_number' => '投票正序', 'vote_number desc' => '投票倒序','id'=>'ID正序','id desc'=>'ID倒序'];
+    public $status     = [1 => '进行中', 2 => '已结束'];
+    public $order_list = ['vote_number' => '投票正序', 'vote_number desc' => '投票倒序', 'id' => 'ID正序', 'id desc' => 'ID倒序'];
 
     protected $Field         = "*";//过滤字段,默认全部
     protected $Limit         = 100000;//如不分页,展示条数
@@ -119,11 +119,10 @@ class ActivityLogInit extends Base
                     $item['emotion_other'] = $matches[1];
                 }
 
-                if (strpos($item['tag'], '其他') !== false){
+                if (strpos($item['tag'], '其他') !== false) {
                     preg_match('/\((.*?)\)/', $item['tag'], $matches);
                     $item['tag_other'] = $matches[1];
                 }
-
 
 
             } else {
@@ -480,15 +479,22 @@ class ActivityLogInit extends Base
 
             //订单号过长问题
             if ($item["order_num"]) $item["order_num"] = $item["order_num"] . "\t";
+            if ($item["id_number"]) $item["id_number"] = $item["id_number"] . "\t";
+            if ($item["phone"]) $item["phone"] = $item["phone"] . "\t";
 
             //图片链接 可用默认浏览器打开   后面为展示链接名字 --单独,多图特殊处理一下
-            if ($item["image"]) $item["image"] = '=HYPERLINK("' . cmf_get_asset_url($item['image']) . '","图片.png")';
+            if ($item["image"]) $item["image"] = '=HYPERLINK("' . cmf_get_asset_url($item['image']) . '","图片")';
+
+            //图片链接 可用默认浏览器打开   后面为展示链接名字 --单独,多图特殊处理一下
+            if ($item["video"]) $item["video"] = '=HYPERLINK("' . cmf_get_asset_url($item['video']) . '","视频")';
 
 
             //用户信息
             $user_info        = $item['user_info'];
             $item['userInfo'] = "(ID:{$user_info['id']}) {$user_info['nickname']}  {$user_info['phone']}";
 
+            //地区
+            $item['region'] = $item['province'] . $item['city'] . $item['district'];
 
             //背景颜色
             if ($item['unit'] == '测试8') $item['BackgroundColor'] = 'red';
@@ -496,10 +502,28 @@ class ActivityLogInit extends Base
 
         $headArrValue = [
             ["rowName" => "ID", "rowVal" => "id", "width" => 10],
+            ["rowName" => "活动", "rowVal" => "activity_name", "width" => 30],
             ["rowName" => "用户信息", "rowVal" => "userInfo", "width" => 30],
-            ["rowName" => "名字", "rowVal" => "name", "width" => 20],
-            ["rowName" => "年龄", "rowVal" => "age", "width" => 20],
-            ["rowName" => "测试", "rowVal" => "test", "width" => 20],
+            ["rowName" => "序号", "rowVal" => "number", "width" => 30],
+            ["rowName" => "姓名", "rowVal" => "username", "width" => 30],
+            ["rowName" => "性别", "rowVal" => "gender", "width" => 30],
+            ["rowName" => "出生日期", "rowVal" => "birth", "width" => 30],
+            ["rowName" => "年龄", "rowVal" => "age", "width" => 30],
+            ["rowName" => "民族", "rowVal" => "nation", "width" => 30],
+            ["rowName" => "宗教信仰", "rowVal" => "religion", "width" => 30],
+            ["rowName" => "身份证", "rowVal" => "id_number", "width" => 30],
+            ["rowName" => "联系方式", "rowVal" => "phone", "width" => 30],
+            ["rowName" => "地区", "rowVal" => "region", "width" => 30],
+            ["rowName" => "报名赛道", "rowVal" => "track", "width" => 30],
+            ["rowName" => "兴趣爱好", "rowVal" => "interests", "width" => 30],
+            ["rowName" => "情感状态", "rowVal" => "emotion", "width" => 30],
+            ["rowName" => "演舞经验", "rowVal" => "dance", "width" => 30],
+            ["rowName" => "擅长的歌曲/特色", "rowVal" => "song", "width" => 30],
+            ["rowName" => "给自己贴个标签", "rowVal" => "tag", "width" => 30],
+            ["rowName" => "平台账号", "rowVal" => "account", "width" => 30],
+            ["rowName" => "照片", "rowVal" => "image", "width" => 30],
+            ["rowName" => "视频", "rowVal" => "video", "width" => 30],
+            ["rowName" => "投票数量", "rowVal" => "vote_number", "width" => 30],
             ["rowName" => "创建时间", "rowVal" => "create_time", "width" => 30],
         ];
 

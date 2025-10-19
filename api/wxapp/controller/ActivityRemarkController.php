@@ -149,9 +149,9 @@ class ActivityRemarkController extends AuthController
         $params["field"]         = "*";//过滤字段
         if ($params['is_paginate']) $result = $ActivityRemarkInit->get_list($where, $params);
         if (empty($params['is_paginate'])) $result = $ActivityRemarkInit->get_list_paginate($where, $params);
-        if (empty($result)) $this->success("暂无信息!",[]);
+        if (empty($result)) $this->success("暂无信息!");
 
-        $this->success("请求成功!", $result);
+        $this->success("请求成功!");
     }
 
 
